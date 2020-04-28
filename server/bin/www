@@ -88,15 +88,3 @@ function onListening() {
   var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
   debug("Listening on " + bind);
 }
-
-const io = require("socket.io")(server);
-const messages = [];
-
-io.on("connection", (socket) => {
-  console.log("new socket: ", socket.id);
-  socket.on("data", function (message) {
-    console.log(message);
-    messages.push(message);
-    io.emit("data", JSON.stringify(messages));
-  });
-});
