@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/SamarGooda/BookManagementWebApp/issues"
   },
-  "homepage": "https://github.com/SamarGooda/BookManagementWebApp#readme"
+  "homepage": "https://github.com/SamarGooda/BookManagementWebApp#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.10",
+    "morgan": "^1.10.0"
+  }
 }
