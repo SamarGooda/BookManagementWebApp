@@ -74,7 +74,7 @@ const bookValidation = {
 
 const shelveTypeValidation = {
   type = "String",
-  enum: ["read", "current", "want"],
+  enum: ["none","read", "current", "want"],
   required: true,
 }
 
@@ -92,7 +92,7 @@ module.exports = [
   userValidation,
   bookValidation,
   shelveTypeValidation,
-  
+
   USERS_DOC_NAME,
   CATEGORIES_DOC_NAME,
   AUTHORS_DOC_NAME,
