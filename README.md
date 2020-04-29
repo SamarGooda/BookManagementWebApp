@@ -4,8 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/atefhares/CrowdFunding-Web-App/blob/master/LICENSE)
 ![GitHub contributors](https://img.shields.io/github/contributors/SamarGooda/BookManagementWebApp)
 ![](https://img.shields.io/badge/expressJs-blue)
-<img src="https://cdn.worldvectorlogo.com/logos/mongodb.svg" width="100" height="50">
-<img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" width="100" height="50">
+
+<img src="https://cdn.worldvectorlogo.com/logos/mongodb.svg" width="100" height="50"> <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" width="100" height="50">
 
 
 A Web application helps you explore books by Cateogry and/or Author. also you can signup and have your own book-shelves.
