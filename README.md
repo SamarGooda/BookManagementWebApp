@@ -21,9 +21,9 @@ A Web application helps you explore books by Cateogry and/or Author. also you ca
     npm init
     npm i
     ```
-    ### To run the client
-    - install [jekyll](https://jekyllrb.com/) gem 
-    - go to `/client` and run the follwing:
+  ### To run the client
+   - install [jekyll](https://jekyllrb.com/) gem 
+   - go to `/client` and run the follwing:
      ```
      jekyll serve
      ```
