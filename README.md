@@ -10,22 +10,24 @@
 
 A Web application helps you explore books by Cateogry and/or Author. also you can signup and have your own book-shelves.
 
-
-## Getting started with the server
-### To run the server
-- install `nodejs v13+` and `npm` on your system
-- go to `/server` and run the follwing:
-  ```
-  npm init
-  npm i
-  ```
+## Getting started:
+<details>
+  <summary>click me!</summary>
   
-### To run the client
-- install [jekyll](https://jekyllrb.com/) gem 
-- go to `/client` and run the follwing:
-  ```
-  jekyll serve
-  ```
+  ### To run the server
+  - install `nodejs v13+` and `npm` on your system
+  - go to `/server` and run the follwing:
+    ```
+    npm init
+    npm i
+    ```
+    ### To run the client
+    - install [jekyll](https://jekyllrb.com/) gem 
+    - go to `/client` and run the follwing:
+     ```
+     jekyll serve
+     ```
+</details>
 
 
 ## 
