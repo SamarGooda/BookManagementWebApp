@@ -8,6 +8,7 @@ const cors = require("cors");
 const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/books");
 const categoryRouter = require("./routes/categories");
+const adminRouter = require("./routes/admin");
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/books", bookRouter);
 app.use("/author", authorRouter);
 app.use("/category", categoryRouter);
+app.use("/admin", adminRouter);
 
 app.use((err, req, res, next) => {
   debugger;
