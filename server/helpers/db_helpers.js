@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const USERS_DOC_NAME = "User";
 const CATEGORIES_DOC_NAME = "Category";
 const AUTHORS_DOC_NAME = "Author";
@@ -73,7 +75,7 @@ const bookValidation = {
 };
 
 const shelveTypeValidation = {
-  type = "String",
+  type: String,
   enum: ["none","read", "current", "want"],
   required: true,
 }
