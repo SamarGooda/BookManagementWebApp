@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const dbHelpers = require("../helpers/dbdbHelpers");
+const dbHelpers = require("../helpers/db_helpers");
 
 const schema = new mongoose.Schema({
   first_name: dbHelpers.nameValidation,

@@ -4,13 +4,26 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
+const usersRouter = require("./routes/users")
 const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/books");
 const categoryRouter = require("./routes/categories");
 const adminRouter = require("./routes/admin");
 
 const app = express();
+
+mongoose.connect('mongodb://localhost:27017/BookManagementWebApp', {
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  useNewUrlParser: true
+}, (err) => {
+
+  if (!err) return console.info('connection established to mongodb')
+  console.error("Error occurred while connecting to db " + err)
+});
+
 
 app.use(cors());
 app.use(logger("dev"));
@@ -19,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use("/users", usersRouter);
 app.use("/books", bookRouter);
 app.use("/author", authorRouter);
 app.use("/category", categoryRouter);
