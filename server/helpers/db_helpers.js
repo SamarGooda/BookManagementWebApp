@@ -76,29 +76,29 @@ const bookValidation = {
 
 const shelveTypeValidation = {
   type: String,
-  enum: ["none","read", "current", "want"],
+  enum: ["none", "read", "current", "want"],
   required: true,
 }
 
-module.exports = [
-  nameValidation,
-  dateValidation,
-  imageValidation,
-  passwordValidation,
-  emailValidation,
-  bookTitleValidation,
-  bookAuthorValidation,
-  categoryValidation,
-  categoryNameValidation,
-  reviewTextValidation,
-  userValidation,
-  bookValidation,
-  shelveTypeValidation,
+module.exports = {
+  'nameValidation': nameValidation,
+  'dateValidation': dateValidation,
+  'imageValidation': imageValidation,
+  'passwordValidation': passwordValidation,
+  'emailValidation': emailValidation,
+  'bookTitleValidation': bookTitleValidation,
+  'bookAuthorValidation': bookAuthorValidation,
+  'categoryValidation': categoryValidation,
+  'categoryNameValidation': categoryNameValidation,
+  'reviewTextValidation': reviewTextValidation,
+  'userValidation': userValidation,
+  'bookValidation': bookValidation,
+  'shelveTypeValidation': shelveTypeValidation,
 
-  USERS_DOC_NAME,
-  CATEGORIES_DOC_NAME,
-  AUTHORS_DOC_NAME,
-  BOOKS_DOC_NAME,
-  BOOKS_SHELVES_DOC_NAME,
-  BOOKS_REVIEWS_DOC_NAME,
-];
+  'USERS_DOC_NAME': USERS_DOC_NAME,
+  'CATEGORIES_DOC_NAME': CATEGORIES_DOC_NAME,
+  'AUTHORS_DOC_NAME': AUTHORS_DOC_NAME,
+  'BOOKS_DOC_NAME': BOOKS_DOC_NAME,
+  'BOOKS_SHELVES_DOC_NAME': BOOKS_SHELVES_DOC_NAME,
+  'BOOKS_REVIEWS_DOC_NAME': BOOKS_REVIEWS_DOC_NAME,
+};
