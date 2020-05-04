@@ -11,6 +11,7 @@ const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/books");
 const categoryRouter = require("./routes/categories");
 const adminRouter = require("./routes/admin");
+const errorsRouter = require("./routes/errors");
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/books", bookRouter);
 app.use("/author", authorRouter);
 app.use("/category", categoryRouter);
 app.use("/admin", adminRouter);
+app.use("/errors", errorsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -53,7 +55,21 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.send(err);
+  switch (res.statusCode) {
+    case 401:
+      res.redirect("/errors/401");
+      // res.send("4000000000000000001111");
+      // res.set("Content-Type", "text/html");
+      // res.sendFile(path.resolve("../client/_site/html/admin_panel/login.html"));
+      break;
+    case 404:
+      res.redirect("/errors/404");
+
+      // res.send("4000000000000000004");
+      break;
+    default:
+      res.send(err);
+  }
 });
 
 module.exports = app;
