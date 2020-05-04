@@ -20,13 +20,23 @@ function getNewJWT(payload) {
 }
 
 router.use((req, res, next) => {
+  if (
+    req.path === "/login" ||
+    req.path === "/stylecheets/admin.css" ||
+    req.path === "/javascript/admin.js"
+  ) {
+    next();
+    return;
+  }
+
   console.log(req);
 
   const token = req.cookies.token;
   console.log("token is: ", token);
 
   if (!token) {
-    next(createError(401));
+    res.redirect("/admin/login");
+    // next(createError(401));
   } else {
     try {
       jwt.verify(token, jwtKey);
