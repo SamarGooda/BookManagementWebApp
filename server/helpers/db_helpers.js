@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const USERS_DOC_NAME = "User";
 const CATEGORIES_DOC_NAME = "Category";
 const AUTHORS_DOC_NAME = "Author";
-const BOOKS_DOC_NAME = "Author";
+const BOOKS_DOC_NAME = "Book";
 const BOOKS_SHELVES_DOC_NAME = "Book_Shelves";
 const BOOKS_REVIEWS_DOC_NAME = "Books_Reviews";
 
