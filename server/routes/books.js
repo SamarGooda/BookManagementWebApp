@@ -25,6 +25,16 @@ const Book = require('../models/Book')
     }
   })
   
+  router.get('/:id', async(req, res,next) => {
+    try {
+        const book_data = await Book.findById(req.params.id)
+        return res.json(book_data)
+    } catch (err) {
+      next(err)
+    }
+  
+  })
+
   router.delete('/:id', async(req, res, next) => {
     try {
         const book_data = await Book.findByIdAndRemove(req.params.id)
@@ -34,16 +44,15 @@ const Book = require('../models/Book')
     }
   })
   
-  // router.patch('/:id', async(req, res,next) => {
-  //   const { body: { title,image,author,category } } = req
-  //   try {
-  //       const book_data = await UserModel.findByIdAndUpdate(req.params.id, { title,image,author,category })
-  //       return res.json(book_data)
-  //   } catch (err) {
-  //       throw err
-  //   }
-  // })
-
+  router.patch('/:id', async(req, res,next) => {
+    const { body: { title,image,author,category } } = req
+    try {
+        const book_data = await Book.findByIdAndUpdate(req.params.id, { title,image,author,category })
+        return res.json(book_data)
+    } catch (err) {
+        throw err
+    }
+  })
 
 
 
