@@ -6,7 +6,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-const usersRouter = require("./routes/users")
+const usersRouter = require("./routes/users");
 const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/books");
 const categoryRouter = require("./routes/categories");
@@ -14,16 +14,18 @@ const adminRouter = require("./routes/admin");
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/BookManagementWebApp', {
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useNewUrlParser: true
-}, (err) => {
-
-  if (!err) return console.info('connection established to mongodb')
-  console.error("Error occurred while connecting to db " + err)
-});
-
+mongoose.connect(
+  "mongodb://localhost:27017/BookManagementWebApp",
+  {
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  },
+  (err) => {
+    if (!err) return console.info("connection established to mongodb");
+    console.error("Error occurred while connecting to db " + err);
+  }
+);
 
 app.use(cors());
 app.use(logger("dev"));
@@ -38,12 +40,6 @@ app.use("/author", authorRouter);
 app.use("/category", categoryRouter);
 app.use("/admin", adminRouter);
 
-app.use((err, req, res, next) => {
-  debugger;
-  console.log(err);
-  res.status(500).send(err);
-});
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -57,7 +53,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.send(err);
 });
 
 module.exports = app;

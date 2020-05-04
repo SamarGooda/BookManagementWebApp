@@ -1,6 +1,44 @@
 const express = require("express");
-const router = express.Router();
+const jwt = require("jsonwebtoken");
 var path = require("path");
+const createError = require("http-errors");
+
+const router = express.Router();
+
+const jwtKey = "Ht%yh,PvT~4qV^;R"; //this should be moved to config or env var
+const jwtExpirySeconds = 300;
+
+function getNewJWT(payload) {
+  // Create a new token with the username in the payload
+  // and which expires 300 seconds after issue
+  const token = jwt.sign({ payload }, jwtKey, {
+    algorithm: "HS256",
+    expiresIn: jwtExpirySeconds,
+  });
+  console.log("token:", token);
+  return token;
+}
+
+router.use((req, res, next) => {
+  console.log(req);
+
+  const token = req.cookies.token;
+  console.log("token is: ", token);
+
+  if (!token) {
+    next(createError(401));
+  } else {
+    try {
+      jwt.verify(token, jwtKey);
+      next();
+    } catch (e) {
+      console.log(e);
+      next(createError(401));
+    }
+  }
+});
+
+// ----------------------------------------------------------------
 
 router.get("/", async (request, response) => {});
 
