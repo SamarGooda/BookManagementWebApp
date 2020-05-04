@@ -58,14 +58,9 @@ app.use(function (err, req, res, next) {
   switch (res.statusCode) {
     case 401:
       res.redirect("/errors/401");
-      // res.send("4000000000000000001111");
-      // res.set("Content-Type", "text/html");
-      // res.sendFile(path.resolve("../client/_site/html/admin_panel/login.html"));
       break;
     case 404:
       res.redirect("/errors/404");
-
-      // res.send("4000000000000000004");
       break;
     default:
       res.send(err);
