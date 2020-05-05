@@ -18,7 +18,11 @@ A Web application helps you explore books by Cateogry and/or Author. also you ca
       ```
       npm i -g nodemon 
       ```
-  - go to `/server` and run the follwing:
+  - go to `/server` and run the follwing to install the dependcies:
+     ```
+     npm i
+     ```
+  - then run the follwing:
     ```
     npm i
     nodemon start
