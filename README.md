@@ -19,17 +19,19 @@ A Web application helps you explore books by Cateogry and/or Author. also you ca
       npm i -g nodemon 
       ```
   - go to `/server` and run the follwing to install the dependcies:
+    
      ```
      npm i
      ```
+     
   - then run the follwing:
     ```
-    npm i
     nodemon start
     ```
   ### To build the client
    - install [jekyll](https://jekyllrb.com/) gem 
    - go to `/client` and run the follwing:
+   
      ```
      jekyll build
      ```
