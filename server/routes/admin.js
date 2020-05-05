@@ -19,38 +19,40 @@ function getNewJWT(payload) {
   return token;
 }
 
+function isValidToken(token) {
+  if (!token) {
+    return false;
+  } else {
+    try {
+      jwt.verify(token, jwtKey);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+}
+
 router.use((req, res, next) => {
   if (
-    req.path === "/login" ||
+    req.path === "/" ||
     req.path === "/stylecheets/admin.css" ||
     req.path === "/javascript/admin.js"
   ) {
     next();
-    return;
+    return; //do not proceed
   }
-
-  console.log(req);
 
   const token = req.cookies.token;
   console.log("token is: ", token);
-
-  if (!token) {
-    res.redirect("/admin/login");
-    // next(createError(401));
+  if (isValidToken(token)) {
+    next();
   } else {
-    try {
-      jwt.verify(token, jwtKey);
-      next();
-    } catch (e) {
-      console.log(e);
-      next(createError(401));
-    }
+    res.redirect("/admin");
   }
 });
 
 // ----------------------------------------------------------------
-
-router.get("/", async (request, response) => {});
 
 router.get("/javascript/admin.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
@@ -62,9 +64,16 @@ router.get("/stylecheets/admin.css", function (req, res) {
   res.sendFile(path.resolve("../client/_site/stylecheets/admin.css"));
 });
 
-router.get("/login", function (req, res) {
-  res.set("Content-Type", "text/html");
-  res.sendFile(path.resolve("../client/_site/html/admin_panel/login.html"));
+router.get("/", function (req, res) {
+  const token = req.cookies.token;
+  console.log("token is: ", token);
+  if (isValidToken(token)) {
+    res.set("Content-Type", "text/html");
+    res.sendFile(path.resolve("../client/_site/html/admin_panel/index.html"));
+  } else {
+    res.set("Content-Type", "text/html");
+    res.sendFile(path.resolve("../client/_site/html/admin_panel/login.html"));
+  }
 });
 
 router.post("/login", async (request, response) => {
