@@ -22,45 +22,57 @@ const upload = multer({
     // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
 
-router.post('/registration', upload.single("image"), async (req, res) => {
+router.post('/registration', upload.single("image"), async (req, res, next) => {
     console.log(req.body);
 
 
     const { first_name, last_name, password, email } = req.body;
-
+    const fileExt = path.extname(req.file.originalname).toLowerCase();
     const tempPath = req.file.path;
-    const fileName = `${email}.jpg`;
+    const fileName = email + fileExt;
     const relativePath = `uploads/${fileName}`;
     const targetPath = path.join(__dirname, relativePath);
 
     console.log(relativePath);
     console.log(targetPath);
 
-
+    let flag;
     // handle picture upload
-    if (path.extname(req.file.originalname).toLowerCase() === ".jpg") {
-        console.log('test rename')
+    if (fileExt === ".jpg" || fileExt === ".png") {
+        flag = 1;
         fs.rename(tempPath, relativePath, err => {
-            if (err) return handleError(err, res);
-
+            const msg = 'An error happened while saving the profile image'
+            if (err) {
+                flag = 0;
+                return handleError(err, msg, res, next);
+            }
         });
     } else {
-        console.log('test unlink')
-
+        flag = 0;
         fs.unlink(tempPath, err => {
-            if (err) return handleError(err, res);
-            return new Error('Image is not of png or jpg type')
+            const msg = 'Image is not of png or jpg type'
+            console.log(msg)
+            if (err) return handleError(err, msg, res, next);
+            try {
+                throw new Error('Image is not of png or jpg type')
+            } catch (err) {
+                next(err)
+            }
         });
     }
     try {
-        const userInstance = new UserModel({
-            first_name, last_name, password, email, image: relativePath
-        });
-        user = await userInstance.save();
-        return res.json(user);
+        if (flag === 1) {
+            const userInstance = new UserModel({
+                first_name, last_name, password, email, image: relativePath
+            });
+            user = await userInstance.save();
+            return res.json(user);
+        }
     }
     catch (err) {
-        return res.send(err['message']);
+        const msg = 'Error while saving record'
+        handleError(err, msg, res, next)
+        return res.send(err);
     }
 
 })
@@ -75,12 +87,13 @@ router.get('/login', (req, res) => {
     res.sendFile(path.resolve("../client/_site/html/users/login.html"));
 })
 
-const handleError = (err, res) => {
-    console.log("something went wrong 'handeError' function here" + err)
-    // res
-    //     .status(500)
-    //     .contentType("text/plain")
-    //     .end("Oops! Something went wrong!");
+const handleError = (err, msg, res, next) => {
+    console.log("something went wrong 'handleError' function here" + err)
+    res
+        .status(500)
+        .contentType("text/plain")
+        .end(msg);
+    next(err)
 };
 
 module.exports = router
