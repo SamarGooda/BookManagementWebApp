@@ -14,10 +14,14 @@ A Web application helps you explore books by Cateogry and/or Author. also you ca
   
   ### To run the server
   - install `nodejs v13+` and `npm` on your system
+  - install `nodemon` //maybe you should use sude here!
+      ```
+      npm i -g nodemon 
+      ```
   - go to `/server` and run the follwing:
     ```
-    npm init
     npm i
+    nodemon start
     ```
   ### To build the client
    - install [jekyll](https://jekyllrb.com/) gem 
