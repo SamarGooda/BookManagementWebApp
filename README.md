@@ -19,11 +19,18 @@ A Web application helps you explore books by Cateogry and/or Author. also you ca
     npm init
     npm i
     ```
-  ### To run the client
+  ### To build the client
    - install [jekyll](https://jekyllrb.com/) gem 
    - go to `/client` and run the follwing:
      ```
-     jekyll serve
+     jekyll build
+     ```
+     
+   ### To add new admin
+   - go to /server/admin_scripts
+   - run the script as follows:
+     ```
+     node admin_manage.js add email=[ADMIN_EMAIL] password=[ADMIN_PASSWORD]
      ```
 </details>
 
