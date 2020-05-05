@@ -2,6 +2,8 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 var path = require("path");
 const createError = require("http-errors");
+const adminModel = require("../models/admin");
+const bcrypt = require("bcrypt");
 
 const router = express.Router();
 
@@ -36,8 +38,9 @@ function isValidToken(token) {
 router.use((req, res, next) => {
   if (
     req.path === "/" ||
-    req.path === "/stylecheets/admin.css" ||
-    req.path === "/javascript/admin.js"
+    req.path === "/login" ||
+    req.path === "/stylesheets/login.css" ||
+    req.path === "/javascript/login.js"
   ) {
     next();
     return; //do not proceed
@@ -54,14 +57,16 @@ router.use((req, res, next) => {
 
 // ----------------------------------------------------------------
 
-router.get("/javascript/admin.js", function (req, res) {
+router.get("/javascript/login.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
-  res.sendFile(path.resolve("../client/_site/javascript/admin.js"));
+  res.sendFile(path.resolve("../client/_site/admin_panel/javascript/login.js"));
 });
 
-router.get("/stylecheets/admin.css", function (req, res) {
+router.get("/stylesheets/login.css", function (req, res) {
   res.set("Content-Type", "text/css");
-  res.sendFile(path.resolve("../client/_site/stylecheets/admin.css"));
+  res.sendFile(
+    path.resolve("../client/_site/admin_panel/stylesheets/login.css")
+  );
 });
 
 router.get("/", function (req, res) {
@@ -69,28 +74,41 @@ router.get("/", function (req, res) {
   console.log("token is: ", token);
   if (isValidToken(token)) {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/admin_panel/index.html"));
+    res.sendFile(path.resolve("../client/_site/admin_panel/html/index.html"));
   } else {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/admin_panel/login.html"));
+    res.sendFile(path.resolve("../client/_site/admin_panel/html/login.html"));
   }
 });
 
 router.post("/login", async (request, response) => {
-  const { e, p } = request.body;
+  // console.log(request.body);
 
-  const new_post = new postsModel({
-    author: a,
-    content: c,
-    date: d,
-  });
+  const { email, password } = request.body;
 
   try {
-    const saved_post = await new_post.save();
-    response.json(saved_post);
+    const admin = await adminModel.findOne({ email: email });
+    console.log(admin);
+
+    if (!admin) {
+      response.status(401).send();
+      return;
+    }
+
+    console.log(admin.password);
+
+    const isSamePassword = await bcrypt.compare(password, admin.password);
+
+    if (isSamePassword) {
+      token = getNewJWT(admin.email);
+      response.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
+      response.status(201).send();
+    } else {
+      response.status(401).send();
+    }
   } catch (error) {
     console.log(error);
-    response.send("could not save post --> error");
+    response.status(401).send();
   }
 });
 

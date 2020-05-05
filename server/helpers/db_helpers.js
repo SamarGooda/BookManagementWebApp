@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const USERS_DOC_NAME = "User";
+const ADMIN_DOC_NAME = "Admin";
 const CATEGORIES_DOC_NAME = "Category";
 const AUTHORS_DOC_NAME = "Author";
 const BOOKS_DOC_NAME = "Author";
@@ -96,6 +97,7 @@ module.exports = {
   'shelveTypeValidation': shelveTypeValidation,
 
   'USERS_DOC_NAME': USERS_DOC_NAME,
+  'ADMIN_DOC_NAME': ADMIN_DOC_NAME,
   'CATEGORIES_DOC_NAME': CATEGORIES_DOC_NAME,
   'AUTHORS_DOC_NAME': AUTHORS_DOC_NAME,
   'BOOKS_DOC_NAME': BOOKS_DOC_NAME,
