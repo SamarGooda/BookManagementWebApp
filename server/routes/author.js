@@ -26,7 +26,7 @@ router.get("/:id", async (request, response) => {
 
 // ==========================================================================
 
-router.author("/", async (request, response) => {
+router.post("/", async (request, response) => {
   const { f, l, dob, i } = request.body;
 
   const new_author = new authorModel({

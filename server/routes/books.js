@@ -3,56 +3,61 @@ const router = express.Router()
 var path = require("path");
 const Book = require('../models/Book')
  
-  // router.post('/', async(req, res,next) => {
-  //   //  const { id } = req.params
-  //   // res.send("creating user with id = 5")
-  //   const  { title,image,author,category } = req.body
-  //   const books = new Book({ title,image,author,category })
-  //   try {
-  //       const book_data = await books.save()
-  //       return res.json(book_data)
-  //   } catch (err) {
-  //       next(err)
-  //   }
-  // })
+  router.post('/', async(req, res,next) => {
+    //  const { id } = req.params
+    // res.send("creating user with id = 5")
+    const  { title,image,author,category } = req.body
+    const books = new Book({ title,image,author,category })
+    try {
+        const book_data = await books.save()
+        return res.json(book_data)
+    } catch (err) {
+        next(err)
+    }
+  })
 
-  // router.get('/', async(req, res, next) => {
-  //   try {
-  //       const books = await Book.find({})
-  //       return res.json(books)
-  //   } catch (err) {
-  //       next(err)
-  //   }
-  // })
+  router.get('/', async(req, res, next) => {
+    try {
+        const books = await Book.find({})
+        return res.json(books)
+    } catch (err) {
+        next(err)
+    }
+  })
   
-  // router.get('/:id', async(req, res,next) => {
-  //   try {
-  //       const book_data = await Book.findById(req.params.id)
-  //       return res.json(book_data)
-  //   } catch (err) {
-  //     next(err)
-  //   }
   
-  // })
+  router.get('/:id', async(req, res,next) => {
+    try {
+        const book_data = await Book.findById(req.params.id)
+        return res.json(book_data)
+    } catch (err) {
+      next(err)
+    }
+  
+  })
+  
 
-  // router.delete('/:id', async(req, res, next) => {
-  //   try {
-  //       const book_data = await Book.findByIdAndRemove(req.params.id)
-  //       return res.json(book_data)
-  //   } catch (err) {
-  //       next(err)
-  //   }
-  // })
+  router.delete('/:id', async(req, res, next) => {
+    try {
+        const book_data = await Book.findByIdAndRemove(req.params.id)
+        return res.json(book_data)
+    } catch (err) {
+        next(err)
+    }
+  })
+
+
+  router.patch('/:id', async(req, res,next) => {
+    const { body: { title,image,author,category } } = req
+    try {
+        const book_data = await Book.findByIdAndUpdate(req.params.id, { title,image,author,category })
+        return res.json(book_data)
+    } catch (err) {
+         next(err)
+    }
+  })
+
   
-  // router.patch('/:id', async(req, res,next) => {
-  //   const { body: { title,image,author,category } } = req
-  //   try {
-  //       const book_data = await Book.findByIdAndUpdate(req.params.id, { title,image,author,category })
-  //       return res.json(book_data)
-  //   } catch (err) {
-  //       throw err
-  //   }
-  // })
 
   router.get("/", async (request, response) => {});
 

@@ -14,23 +14,23 @@ const schema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// schema.pre("save", async function (next) {
-//   try {
-//     const author = authorModel.findById(this.author);
-//     if (!author) {
-//       next(new Error("Author is not valid!"));
-//     }
+schema.pre("save", async function (next) {
+  try {
+    const author = authorModel.findById(this.author);
+    if (!author) {
+      next(new Error("Author is not valid!"));
+    }
 
-//     const category = categoryModel.findById(this.category);
-//     if (!category) {
-//       next(new Error("Category is not valid!"));
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
+    const category = categoryModel.findById(this.category);
+    if (!category) {
+      next(new Error("Category is not valid!"));
+    }
+  } catch (error) {
+    console.log(error);
+  }
 
-//   next();
-// });
+  next();
+});
 
 const Book = mongoose.model(dbHelpers.BOOKS_DOC_NAME, schema);
 module.exports = Book;
