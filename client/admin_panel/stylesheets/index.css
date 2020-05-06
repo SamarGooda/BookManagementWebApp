@@ -1,0 +1,41 @@
+.table {
+  max-width: 1300px;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btns_div {
+  margin-left: auto;
+  display: block;
+  margin-top: 20px;
+  margin-left: 30px;
+  margin-bottom: 15px;
+  /* float: left; */
+}
+
+/* Style buttons */
+.btns_div .btn {
+  background-color: DodgerBlue;
+  /* Blue background */
+  border: none;
+  /* Remove borders */
+  color: white;
+  /* White text */
+  padding: 12px 16px;
+  /* Some padding */
+  font-size: 16px;
+  /* Set a font size */
+  cursor: pointer;
+  /* Mouse pointer on hover */
+}
+
+/* Darker background on mouse-over */
+.btns_div .btn:hover {
+  background-color: RoyalBlue;
+}
+
+.admin-data {
+  margin: 10px;
+  float: right;
+}

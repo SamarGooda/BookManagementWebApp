@@ -3,6 +3,14 @@ title: Index
 layout: admin_layout
 ---
 
+<link rel="stylesheet" href="/admin/stylesheets/index.css">
+
+<div class="admin-data">
+  <label id="adminEmail"></label>
+  <button id="logoutbtn" class="ml-auto btn btn-danger">Log out</button>
+</div>
+
+
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="categories-tab" data-toggle="tab" href="#categories" role="tab"
@@ -17,8 +25,103 @@ layout: admin_layout
       aria-selected="false">Authors</a>
   </li>
 </ul>
+
 <div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="categories" role="tabpanel" aria-labelledby="categories-tab">...</div>
-  <div class="tab-pane fade" id="books" role="tabpanel" aria-labelledby="books-tab">...</div>
-  <div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">...</div>
+  <div class="tab-pane fade show active" id="categories" role="tabpanel" aria-labelledby="categories-tab">
+    <div class="btns_div">
+      <button class="btn"><i class="fa fa-plus"></i></button>
+      <button class="btn"><i class="fa fa-refresh"></i></button>
+    </div>
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First</th>
+          <th scope="col">Last</th>
+          <th scope="col">Handle</th>
+        </tr>
+      </thead>
+      <!-- <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody> -->
+    </table>
+  </div>
+  <div class="tab-pane fade" id="books" role="tabpanel" aria-labelledby="books-tab">
+    <div class="btns_div">
+      <button class="btn"><i class="fa fa-plus"></i></button>
+      <button class="btn"><i class="fa fa-refresh"></i></button>
+    </div>
+
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First</th>
+          <th scope="col">Last</th>
+          <th scope="col">Handle</th>
+        </tr>
+      </thead>
+      <!-- <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody> -->
+    </table>
+  </div>
+  <div class="tab-pane fade" id="authors" role="tabpanel" aria-labelledby="authors-tab">
+    <div class="btns_div">
+      <button class="btn" id="add_author_btn"><i class="fa fa-plus"></i></button>
+      <button class="btn" id="refresh_authors_btn"><i class="fa fa-refresh"></i></button>
+    </div>
+
+    <table class="table table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" style="max-width: calc(1 * 100% / 12)">#</th>
+          <th scope=" col" style="max-width: calc(2 * 100% / 12)">First name</th>
+          <th scope="col" style="max-width: calc(2 * 100% / 12)">Last name</th>
+          <th scope="col" style="max-width: calc(2 * 100% / 12)">Date of birth</th>
+          <th scope="col" style="max-width: calc(3 * 100% / 12)">Image</th>
+          <th scope="col" style="max-width: calc(2 * 100% / 12)">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="authorstable">
+      </tbody>
+    </table>
+  </div>
 </div>
+
+
+<script src="/admin/javascript/index.js"></script>

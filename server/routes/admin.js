@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 
 const jwtKey = "Ht%yh,PvT~4qV^;R"; //this should be moved to config or env var
-const jwtExpirySeconds = 300;
+const jwtExpirySeconds = 86400; // 24 hours
 
 function getNewJWT(payload) {
   // Create a new token with the username in the payload
@@ -35,6 +35,21 @@ function isValidToken(token) {
   }
 }
 
+function getUserId(token) {
+  console.log("getUserId ======================>");
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, jwtKey);
+      console.log("decoded", decoded);
+      return decoded.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  return undefined;
+}
+
 router.use((req, res, next) => {
   if (
     req.path === "/" ||
@@ -57,6 +72,18 @@ router.use((req, res, next) => {
 
 // ----------------------------------------------------------------
 
+router.get("/javascript/index.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/admin_panel/javascript/index.js"));
+});
+
+router.get("/stylesheets/index.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(
+    path.resolve("../client/_site/admin_panel/stylesheets/index.css")
+  );
+});
+
 router.get("/javascript/login.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
   res.sendFile(path.resolve("../client/_site/admin_panel/javascript/login.js"));
@@ -67,6 +94,19 @@ router.get("/stylesheets/login.css", function (req, res) {
   res.sendFile(
     path.resolve("../client/_site/admin_panel/stylesheets/login.css")
   );
+});
+
+router.get("/data", async function (req, res) {
+  const token = req.cookies.token;
+  console.log("token is: ", token);
+  let userId = getUserId(token);
+  console.log("userId: " + userId);
+  if (!userId) {
+    res.status(400).send();
+  } else {
+    const admin = await adminModel.findById(userId);
+    res.json(admin.email);
+  }
 });
 
 router.get("/", function (req, res) {
@@ -80,6 +120,17 @@ router.get("/", function (req, res) {
     res.sendFile(path.resolve("../client/_site/admin_panel/html/login.html"));
   }
 });
+
+// router.post("/logout", async (request, response) => {
+//   const token = request.cookies.token;
+//   console.log("token is: ", token);
+//   try {
+//     jwt.destroy(token);
+//   } catch (e) {
+//     console.log(e);
+//   }
+//   response.status(201).send();
+// });
 
 router.post("/login", async (request, response) => {
   // console.log(request.body);
@@ -100,7 +151,7 @@ router.post("/login", async (request, response) => {
     const isSamePassword = await bcrypt.compare(password, admin.password);
 
     if (isSamePassword) {
-      token = getNewJWT(admin.email);
+      token = getNewJWT(admin._id);
       response.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
       response.status(201).send();
     } else {

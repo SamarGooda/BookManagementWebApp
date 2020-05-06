@@ -6,7 +6,9 @@ const authorModel = require("../models/Author");
 
 router.get("/", async (request, response) => {
   try {
-    const authors = await authorModel.find({});
+    const authors = await authorModel
+      .find({})
+      .sort({ first_name: 1, last_name: 1 });
     response.json(authors);
   } catch (error) {
     console.log(error);
@@ -28,6 +30,7 @@ router.get("/:id", async (request, response) => {
 
 router.post("/", async (request, response) => {
   const { f, l, dob, i } = request.body;
+  console.log("request.body: ", request.body);
 
   const new_author = new authorModel({
     first_name: f,
@@ -74,6 +77,8 @@ router.patch("/:id", async (request, response) => {
 
 router.delete("/:id", async (request, response) => {
   try {
+    console.log("I am here");
+
     const deleted_author = await authorModel.findByIdAndDelete(
       request.params.id
     );
