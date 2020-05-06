@@ -57,6 +57,18 @@ router.use((req, res, next) => {
 
 // ----------------------------------------------------------------
 
+router.get("/javascript/index.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/admin_panel/javascript/index.js"));
+});
+
+router.get("/stylesheets/index.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(
+    path.resolve("../client/_site/admin_panel/stylesheets/index.css")
+  );
+});
+
 router.get("/javascript/login.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
   res.sendFile(path.resolve("../client/_site/admin_panel/javascript/login.js"));
