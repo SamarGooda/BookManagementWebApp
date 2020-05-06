@@ -93,16 +93,16 @@ router.get("/", function (req, res) {
   }
 });
 
-router.post("/logout", async (request, response) => {
-  const token = request.cookies.token;
-  console.log("token is: ", token);
-  try {
-    jwt.destroy(token);
-  } catch (e) {
-    console.log(e);
-  }
-  response.status(201).send();
-});
+// router.post("/logout", async (request, response) => {
+//   const token = request.cookies.token;
+//   console.log("token is: ", token);
+//   try {
+//     jwt.destroy(token);
+//   } catch (e) {
+//     console.log(e);
+//   }
+//   response.status(201).send();
+// });
 
 router.post("/login", async (request, response) => {
   // console.log(request.body);
