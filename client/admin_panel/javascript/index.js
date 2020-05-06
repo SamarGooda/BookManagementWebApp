@@ -13,11 +13,13 @@ function onRefreshAuthorsBtnClicked(e) {
 }
 
 function onAddAuthorBtnClicked(e) {
-  console.log("id", e.target.id);
+  console.log("id", this.id);
 }
 
 function onAuthorDeleteBtnClicked(e) {
-  let author_id = e.target.id.replace("btn_delete_", "");
+  console.log("this.id: ", this.id);
+
+  let author_id = this.id.replace("btn_delete_", "");
   console.log("author_id: ", author_id);
   axios
     .delete(BASE_URL + "/authors/" + author_id)
@@ -80,6 +82,7 @@ function showAuthors(authors) {
 // --------------------------------------------------------------------
 
 function getAllBooks() {}
+
 function getAllAuthors() {
   axios
     .get(BASE_URL + "/authors")
@@ -93,6 +96,7 @@ function getAllAuthors() {
       console.log("error:", error);
     });
 }
+
 function getAllCategories() {}
 
 // --------------------------------------------------------------------
