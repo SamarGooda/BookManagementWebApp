@@ -35,6 +35,21 @@ function isValidToken(token) {
   }
 }
 
+function getUserId(token) {
+  console.log("getUserId ======================>");
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, jwtKey);
+      console.log("decoded", decoded);
+      return decoded.payload;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  return undefined;
+}
+
 router.use((req, res, next) => {
   if (
     req.path === "/" ||
@@ -81,6 +96,19 @@ router.get("/stylesheets/login.css", function (req, res) {
   );
 });
 
+router.get("/data", async function (req, res) {
+  const token = req.cookies.token;
+  console.log("token is: ", token);
+  let userId = getUserId(token);
+  console.log("userId: " + userId);
+  if (!userId) {
+    res.status(400).send();
+  } else {
+    const admin = await adminModel.findById(userId);
+    res.json(admin.email);
+  }
+});
+
 router.get("/", function (req, res) {
   const token = req.cookies.token;
   console.log("token is: ", token);
@@ -123,7 +151,7 @@ router.post("/login", async (request, response) => {
     const isSamePassword = await bcrypt.compare(password, admin.password);
 
     if (isSamePassword) {
-      token = getNewJWT(admin.email);
+      token = getNewJWT(admin._id);
       response.cookie("token", token, { maxAge: jwtExpirySeconds * 1000 });
       response.status(201).send();
     } else {

@@ -1,6 +1,7 @@
 const addAuthorBtn = document.getElementById("add_author_btn");
 const refreshAuthorsBtn = document.getElementById("refresh_authors_btn");
 const authorsTable = document.getElementById("authorstable");
+const adminEmailLabel = document.getElementById("adminEmail");
 
 const BASE_URL = "http://localhost:5000";
 
@@ -29,6 +30,25 @@ function onAuthorDeleteBtnClicked(e) {
       console.log("error:", error);
     });
 }
+
+// --------------------------------------------------------------------
+
+function showAdminData() {
+  console.log("getting admin data");
+
+  axios
+    .get(BASE_URL + "/admin/data")
+    .then(function (response) {
+      console.log("response: " + JSON.stringify(response));
+      let data = response.data;
+      console.log("admin-data:", data);
+      adminEmailLabel.textContent = data;
+    })
+    .catch(function (error) {
+      console.log("error:", error);
+    });
+}
+
 // --------------------------------------------------------------------
 function showAuthors(authors) {
   let html = "";
@@ -39,7 +59,7 @@ function showAuthors(authors) {
     <td>${authors[i].last_name}</td>
     <td>${authors[i].date_of_birth}</td>
     <td><a href="${authors[i].image}" target="_blank">show image</a></td>
-    <td><button class="btn" id="btn_delete_${
+    <td><button class="btn btn-danger" id="btn_delete_${
       authors[i]._id
     }"><i class="fa fa-trash"></i></button></td>
   </tr>`;
@@ -89,3 +109,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
 
 addAuthorBtn.addEventListener("click", onAddAuthorBtnClicked);
 refreshAuthorsBtn.addEventListener("click", onRefreshAuthorsBtnClicked);
+
+// --------------------------------------------------------------------
+
+showAdminData();
