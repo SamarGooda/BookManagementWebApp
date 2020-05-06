@@ -16,7 +16,7 @@ const Book = require('../models/Book')
     }
   })
 
-  router.get('/', async(req, res, next) => {
+  router.get('/data', async(req, res, next) => {
     try {
         const books = await Book.find({})
         return res.json(books)
@@ -59,7 +59,7 @@ const Book = require('../models/Book')
 
   
 
-  router.get("/", async (request, response) => {});
+  // router.get("/", async (request, response) => {});
 
 router.get("/javascript/books.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
@@ -72,7 +72,7 @@ router.get("/stylecheets/books.css", function (req, res) {
   
 });
 
-router.get("/view", function (req, res) {
+router.get("/", function (req, res) {
   res.set("Content-Type", "text/html");
   res.sendFile(path.resolve("../client/_site/html/books/books.html"));
 });
