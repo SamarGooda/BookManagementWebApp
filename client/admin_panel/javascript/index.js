@@ -2,6 +2,7 @@ const addAuthorBtn = document.getElementById("add_author_btn");
 const refreshAuthorsBtn = document.getElementById("refresh_authors_btn");
 const authorsTable = document.getElementById("authorstable");
 const adminEmailLabel = document.getElementById("adminEmail");
+const logoutBtn = document.getElementById("logoutbtn");
 
 const BASE_URL = "http://localhost:5000";
 
@@ -31,6 +32,10 @@ function onAuthorDeleteBtnClicked(e) {
     });
 }
 
+function onLogoutBtnClicked(e) {
+  document.cookie = "token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  window.location.replace("/admin");
+}
 // --------------------------------------------------------------------
 
 function showAdminData() {
@@ -109,6 +114,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
 
 addAuthorBtn.addEventListener("click", onAddAuthorBtnClicked);
 refreshAuthorsBtn.addEventListener("click", onRefreshAuthorsBtnClicked);
+logoutBtn.addEventListener("click", onLogoutBtnClicked);
 
 // --------------------------------------------------------------------
 
