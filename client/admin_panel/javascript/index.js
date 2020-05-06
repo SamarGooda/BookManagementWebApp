@@ -57,6 +57,14 @@ function showAdminData() {
 }
 
 // --------------------------------------------------------------------
+function getFormattedDate(dateStr) {
+  const d = new Date(dateStr);
+  const ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
+  const mo = new Intl.DateTimeFormat("en", { month: "short" }).format(d);
+  const da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
+  return `${da}-${mo}-${ye}`;
+}
+
 function showAuthors(authors) {
   let html = "";
   for (i = 0; i < authors.length; i++) {
@@ -64,7 +72,7 @@ function showAuthors(authors) {
     <th scope="row">${i + 1}</th>
     <td>${authors[i].first_name}</td>
     <td>${authors[i].last_name}</td>
-    <td>${authors[i].date_of_birth}</td>
+    <td>${getFormattedDate(authors[i].date_of_birth)}</td>
     <td><a href="${authors[i].image}" target="_blank">show image</a></td>
     <td><button class="btn btn-danger" id="btn_delete_${
       authors[i]._id
