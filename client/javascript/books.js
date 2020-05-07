@@ -30,13 +30,6 @@ function getAllBooks() {
         ${books[i].author.first_name}<br>
         ${books[i].category}</p></div>`
        column.innerHTML += div
-      //  column.appendChild(div);
-      // var div = document.createElement("div");
-      // div.style.width = "100px";
-      // div.style.height = "100px";
-      // div.style.background = "red";
-      // div.style.color = "white";
-      // div.innerHTML = "Hello";
       
      
      }
