@@ -1,4 +1,4 @@
-const table = document.getElementById("main")
+const column = document.getElementById("column")
 
 const BASE_URL = "http://localhost:5000";
 
@@ -16,23 +16,36 @@ function getAllBooks() {
     });
 }
    function showBooks(books){
-     html = ""
+    column.innerHTML=""
+
      for(i=0 ; i < books.length; i++ )
      {
-       html += `<tr> 
-             <td>${books[i].title}<td>
-             <td>${books[i].image}<td>
-             <td>${books[i].author}<td>
-             <td>${books[i].category}<td>
-             <td>"sddff"</td>
-       
-       </tr>`
+
+      // var div = document.createElement('div');
+      // div.id = 'card';
+      // div.className = 'card';
+      
+      let div = `<div class="card"><p>${books[i].title}<br>
+        ${books[i].image}<br>
+        ${books[i].author.first_name}<br>
+        ${books[i].category}</p></div>`
+       column.innerHTML += div
+      //  column.appendChild(div);
+      // var div = document.createElement("div");
+      // div.style.width = "100px";
+      // div.style.height = "100px";
+      // div.style.background = "red";
+      // div.style.color = "white";
+      // div.innerHTML = "Hello";
+      
+     
      }
+   
   
-     table.innerHTML = html
 
    }
 
 getAllBooks();
-console.log("books new");
+console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+console.info("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 

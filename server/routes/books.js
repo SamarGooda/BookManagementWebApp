@@ -18,7 +18,7 @@ const Book = require('../models/Book')
 
   router.get('/data', async(req, res, next) => {
     try {
-        const books = await Book.find({}).populate('author.first_name');
+        const books = await Book.find({}).populate('author');
         // .populate('category')
      
  
