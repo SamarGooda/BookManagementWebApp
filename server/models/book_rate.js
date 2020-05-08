@@ -4,7 +4,7 @@ const userModel = require("./User");
 const bookModel = require("./Book");
 
 const schema = new mongoose.Schema({
-  review: dbHelpers.reviewTextValidation,
+  rate: dbHelpers.rateValueValidation,
   user: dbHelpers.userValidation,
   book: dbHelpers.bookValidation,
 });
@@ -27,5 +27,5 @@ schema.pre("save", async function (next) {
   next();
 });
 
-const review = mongoose.model(dbHelpers.BOOKS_REVIEWS_DOC_NAME, schema);
-module.exports = review;
+const User = mongoose.model(dbHelpers.BOOKS_RATES_DOC_NAME, schema);
+module.exports = User;
