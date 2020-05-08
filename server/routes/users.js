@@ -7,14 +7,29 @@ const multer = require("multer");
 const UserModel = require('../models/User')
 
 
+
+// routes for static files
+
+router.get('/javascript/users.js', (req, res) => {
+    res.set("Content-Type", "text/javascript");
+    res.sendFile(path.resolve("../client/_site/users/javascript/users.js"));
+})
+
+router.get('/stylesheets/users.css', (req, res) => {
+    res.set("Content-Type", "text/css");
+    res.sendFile(path.resolve("../client/_site/users/stylesheets/users.css"));
+})
+
+// logic routes
+
 router.get('/', (req, res) => {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/index.html"));
+    res.sendFile(path.resolve("../client/_site/users/html/index.html"));
 })
 
 router.get('/registration', (req, res) => {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/registration.html"));
+    res.sendFile(path.resolve("../client/_site/users/html/registration.html"));
 })
 
 const upload = multer({
@@ -66,7 +81,8 @@ router.post('/registration', upload.single("image"), async (req, res, next) => {
                 first_name, last_name, password, email, image: relativePath
             });
             user = await userInstance.save();
-            return res.json(user);
+            // return res.json(user);
+            res.sendFile(path.resolve("../client/_site/users/html/login.html"));
         }
     }
     catch (err) {
@@ -79,12 +95,12 @@ router.post('/registration', upload.single("image"), async (req, res, next) => {
 
 router.get('/forgot_password', (req, res) => {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/forgot_password.html"));
+    res.sendFile(path.resolve("../client/_site/users/html/forgot_password.html"));
 })
 
 router.get('/login', (req, res) => {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/login.html"));
+    res.sendFile(path.resolve("../client/_site/users/html/login.html"));
 })
 
 const handleError = (err, msg, res, next) => {
