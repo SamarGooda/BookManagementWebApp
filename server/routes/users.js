@@ -1,49 +1,115 @@
-
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const fs = require('fs');
+const multer = require("multer");
 
 const UserModel = require('../models/User')
 
 
+
+// routes for static files
+
+router.get('/javascript/users.js', (req, res) => {
+    res.set("Content-Type", "text/javascript");
+    res.sendFile(path.resolve("../client/_site/users/javascript/users.js"));
+})
+
+router.get('/stylesheets/users.css', (req, res) => {
+    res.set("Content-Type", "text/css");
+    res.sendFile(path.resolve("../client/_site/users/stylesheets/users.css"));
+})
+
+// logic routes
+
 router.get('/', (req, res) => {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/index.html"));
+    res.sendFile(path.resolve("../client/_site/users/html/index.html"));
 })
 
 router.get('/registration', (req, res) => {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/registration.html"));
+    res.sendFile(path.resolve("../client/_site/users/html/registration.html"));
 })
 
-router.post('/registration', async (req, res) => {
+const upload = multer({
+    dest: "tmp/"
+    // you might also want to set some limits: https://github.com/expressjs/multer#limits
+});
+
+router.post('/registration', upload.single("image"), async (req, res, next) => {
     console.log(req.body);
 
-    const { firstname, lastname, password, email } = req.body;
-    const userInstance = new UserModel({
-        firstName, lastName, password, dateOfBirth, gender, email, phoneNo
-    });
+
+    const { first_name, last_name, password, email } = req.body;
+    const fileExt = path.extname(req.file.originalname).toLowerCase();
+    const tempPath = req.file.path;
+    const fileName = email + fileExt;
+    const relativePath = `uploads/${fileName}`;
+    const targetPath = path.join(__dirname, relativePath);
+
+    console.log(relativePath);
+    console.log(targetPath);
+
+    let flag;
+    // handle picture upload
+    if (fileExt === ".jpg" || fileExt === ".png") {
+        flag = 1;
+        fs.rename(tempPath, relativePath, err => {
+            const msg = 'An error happened while saving the profile image'
+            if (err) {
+                flag = 0;
+                return handleError(err, msg, res, next);
+            }
+        });
+    } else {
+        flag = 0;
+        fs.unlink(tempPath, err => {
+            const msg = 'Image is not of png or jpg type'
+            console.log(msg)
+            if (err) return handleError(err, msg, res, next);
+            try {
+                throw new Error('Image is not of png or jpg type')
+            } catch (err) {
+                next(err)
+            }
+        });
+    }
     try {
-        user = await userInstance.save();
-        return res.json(user);
+        if (flag === 1) {
+            const userInstance = new UserModel({
+                first_name, last_name, password, email, image: relativePath
+            });
+            user = await userInstance.save();
+            // return res.json(user);
+            res.sendFile(path.resolve("../client/_site/users/html/login.html"));
+        }
     }
     catch (err) {
-        return res.send(err['message']);
+        const msg = 'Error while saving record'
+        handleError(err, msg, res, next)
+        return res.send(err);
     }
 
-    res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/registration.html"));
 })
 
 router.get('/forgot_password', (req, res) => {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/forgot_password.html"));
+    res.sendFile(path.resolve("../client/_site/users/html/forgot_password.html"));
 })
 
 router.get('/login', (req, res) => {
     res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/html/users/login.html"));
+    res.sendFile(path.resolve("../client/_site/users/html/login.html"));
 })
 
+const handleError = (err, msg, res, next) => {
+    console.log("something went wrong 'handleError' function here" + err)
+    res
+        .status(500)
+        .contentType("text/plain")
+        .end(msg);
+    next(err)
+};
 
 module.exports = router
