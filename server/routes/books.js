@@ -29,7 +29,7 @@ const Book = require('../models/Book')
   })
   
   
-  router.get('/:id', async(req, res,next) => {
+  router.get('/data/:id', async(req, res,next) => {
     try {
         const book_data = await Book.findById(req.params.id)
         return res.json(book_data)
@@ -40,7 +40,7 @@ const Book = require('../models/Book')
   })
   
 
-  router.delete('/:id', async(req, res, next) => {
+  router.delete('/data/:id', async(req, res, next) => {
     try {
         const book_data = await Book.findByIdAndRemove(req.params.id)
         return res.json(book_data)
@@ -50,7 +50,7 @@ const Book = require('../models/Book')
   })
 
 
-  router.patch('/:id', async(req, res,next) => {
+  router.patch('/data/:id', async(req, res,next) => {
     const { body: { title,image,author,category } } = req
     try {
         const book_data = await Book.findByIdAndUpdate(req.params.id, { title,image,author,category })
@@ -81,8 +81,24 @@ router.get("/", function (req, res) {
 });
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////
 
+//book_details
+router.get("/detailes", function (req, res) {
+  res.set("Content-Type", "text/html");
+  res.sendFile(path.resolve("../client/_site/html/books/book_data.html"));
+});
 
+router.get("/stylecheets/book_data.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(path.resolve("../client/_site/stylecheets/book_data.css"));
+  
+});
+
+router.get("/javascript/book_data.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/javascript/book_data.js"));
+});
 
 
 
