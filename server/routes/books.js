@@ -21,7 +21,7 @@ const Book = require('../models/Book')
         const books = await Book.find({}).populate('author');
         // .populate('category')
      
- 
+              
         return res.json(books)
     } catch (err) {
         next(err)
@@ -31,9 +31,20 @@ const Book = require('../models/Book')
   
   router.get('/data/:id', async(req, res,next) => {
     try {
+      
         const book_data = await Book.findById(req.params.id)
-        return res.json(book_data)
+        if (book_data) 
+         {
+          return res.json(book_data)
+         }
+         else
+         {
+          return res.status(404).send();
+         }
+       
+        
     } catch (err) {
+      console.log("errrrrr:",err)
       next(err)
     }
   
@@ -61,8 +72,9 @@ const Book = require('../models/Book')
   })
 
   
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // router.get("/", async (request, response) => {});
+// routes for books_page
 
 router.get("/javascript/books.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
@@ -83,8 +95,8 @@ router.get("/", function (req, res) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-//book_details
-router.get("/detailes", function (req, res) {
+//routes for book_details
+router.get("/:id", function (req, res) {
   res.set("Content-Type", "text/html");
   res.sendFile(path.resolve("../client/_site/html/books/book_data.html"));
 });
@@ -98,6 +110,7 @@ router.get("/stylecheets/book_data.css", function (req, res) {
 router.get("/javascript/book_data.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
   res.sendFile(path.resolve("../client/_site/javascript/book_data.js"));
+  
 });
 
 
