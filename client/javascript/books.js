@@ -25,10 +25,10 @@ function getAllBooks() {
       // div.id = 'card';
       // div.className = 'card';
       
-      let div = `<div class="card"><p>${books[i].title}<br>
+      let div = `<div class="card"><p>
         ${books[i].image}<br>
-        ${books[i].author.first_name}<br>
-        ${books[i].category}</p></div>`
+        ${books[i].title}<br>
+        ${books[i].author.first_name}<br></p></div>`
        column.innerHTML += div
       
      
@@ -42,3 +42,4 @@ getAllBooks();
 console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 console.info("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
+// ${books[i].category}
