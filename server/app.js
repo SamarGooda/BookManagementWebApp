@@ -12,6 +12,9 @@ const bookRouter = require("./routes/books");
 const categoryRouter = require("./routes/categories");
 const adminRouter = require("./routes/admin");
 const errorsRouter = require("./routes/errors");
+const reviewsRouter = require("./routes/reviews");
+const ratesRouter = require("./routes/rates");
+const imagesRouter = require("./routes/images");
 
 const app = express();
 
@@ -47,6 +50,9 @@ app.use("/authors", authorRouter);
 app.use("/category", categoryRouter);
 app.use("/admin", adminRouter);
 app.use("/errors", errorsRouter);
+app.use("/reviews", reviewsRouter);
+app.use("/rates", ratesRouter);
+app.use("/images", imagesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
