@@ -28,6 +28,12 @@ mongoose.connect(
   }
 );
 
+app.get("/stylecheets/default.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(path.resolve("../client/_site/stylecheets/default.css"));
+  
+});
+
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
@@ -66,5 +72,7 @@ app.use(function (err, req, res, next) {
       res.send(err);
   }
 });
+
+
 
 module.exports = app;
