@@ -1,5 +1,5 @@
-const review = document.getElementById("review")
-const image = document.getElementById("image")
+// const review = document.getElementById("review")
+// const image = document.getElementById("image")
 const details = document.getElementById("details")
 const book_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 const BASE_URL = "http://localhost:5000";
@@ -31,15 +31,21 @@ function getBook_detail() {
   }
 function showBook(book_detail){
     console.log("book_detail:",book_detail)
-    image.innerHTML = `<p>${book_detail.image}</p><br>`
-    details.innerHTML = `<p>${book_detail.title}<br>
-                           ${book_detail.author.first_name}<br>
-                           ${book_detail.category.first_name}</p>`
-    review.innerHTML = `<p>${book_detail.title}</p>`
+    // image.innerHTML = `<p>${book_detail.image}</p><br>`
+    details.innerHTML =  `<div  class="card-body" style="border: none;">
+                          <h4 class="card-title">${book_detail.title}</h4>
+                           <a href="#" class="btn " style="color: blue; ">by BookAuthor: ${book_detail.author.first_name}</a><br>
+                           <a href="#" class="btn " style="color: blue;">Category Name: ${book_detail.category} </a></div>`
+    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+    // review.innerHTML = `<p>${book_detail.title}</p>`
     
    }
 getBook_detail()
 
-console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+
 console.log(window.location.href)
 console.log(window.location.href.substring(window.location.href.lastIndexOf('/') + 1));
+
+// `<p>${book_detail.title}<br>
+//                            ${book_detail.author.first_name}<br>
+//                            ${book_detail.category.first_name}</p>`

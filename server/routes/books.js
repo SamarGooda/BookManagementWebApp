@@ -32,7 +32,7 @@ const Book = require('../models/Book')
   router.get('/data/:id', async(req, res,next) => {
     try {
       
-        const book_data = await Book.findById(req.params.id)
+        const book_data = await Book.findById(req.params.id).populate('author').populate('category');
         if (book_data) 
          {
           return res.json(book_data)
