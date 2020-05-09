@@ -1,0 +1,9 @@
+
+.image{
+ float: left;
+ background-color: burlywood;
+}
+.details{
+ float: right;
+ background-color: darkblue;
+}
