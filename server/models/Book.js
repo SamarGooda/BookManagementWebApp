@@ -10,6 +10,8 @@ const schema = new mongoose.Schema(
     image: dbHelpers.imageValidation,
     author: dbHelpers.bookAuthorValidation,
     category: dbHelpers.categoryValidation,
+    reviews: [dbHelpers.bookReviewValidation],
+    rates: [dbHelpers.bookRateValidation],
   },
   { timestamps: true }
 );
