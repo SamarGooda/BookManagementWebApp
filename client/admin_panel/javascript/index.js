@@ -3,8 +3,60 @@ const refreshAuthorsBtn = document.getElementById("refresh_authors_btn");
 const authorsTable = document.getElementById("authorstable");
 const adminEmailLabel = document.getElementById("adminEmail");
 const logoutBtn = document.getElementById("logoutbtn");
+const closeFormBtn = document.getElementById("x");
+const submitFormBtn = document.getElementById("submitFormBtn");
 
 const BASE_URL = "http://localhost:5000";
+
+// --------------------------------------------------------------------
+function openCreateForm() {
+  document.getElementById("light").style.display = "block";
+  document.getElementById("fade").style.display = "block";
+}
+
+function closeCreateForm() {
+  document.getElementById("light").style.display = "none";
+  document.getElementById("fade").style.display = "none";
+}
+
+function onCreateFormSubmit(e) {
+  e.preventDefault();
+
+  // authorFName = document.getElementById("fname");
+  // authorLName = document.getElementById("lname");
+  // authorDoB = document.getElementById("dob");
+  // authorImage = document.getElementById("i");
+
+  var formData = new FormData();
+  var imagefile = document.getElementById("i");
+  formData.append("image", imagefile.files[0]);
+
+  formData.append("f", document.getElementById("fname").value);
+  formData.append("l", document.getElementById("lname").value);
+  formData.append("dob", document.getElementById("dob").value);
+
+  axios
+    .post(BASE_URL + "/authors", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then(function (response) {
+      console.log("response: " + JSON.stringify(response));
+    })
+    .catch(function (error) {
+      console.log("error:", error);
+    });
+
+  // axios
+  //   .post(BASE_URL + "/authors", body)
+  //   .then(function (response) {
+  //     console.log("response: " + JSON.stringify(response));
+  //   })
+  //   .catch(function (error) {
+  //     console.log("error:", error);
+  //   });
+}
 
 // --------------------------------------------------------------------
 
@@ -14,6 +66,27 @@ function onRefreshAuthorsBtnClicked(e) {
 
 function onAddAuthorBtnClicked(e) {
   console.log("id", this.id);
+  let html = "";
+  html += `<div class="form-group">
+          <label for="fname">First Name</label>
+          <input type="text" class="form-control" name="f", id="fname" placeholder="John">
+          </div>`;
+  html += `<div class="form-group">
+          <label for="lname">Last Name</label>
+          <input type="text" class="form-control" name="l", id="lname" placeholder="Smith">
+          </div>`;
+  html += `<div class="form-group">
+          <label for="dob">Date of birth</label>
+          <input type="text" class="form-control" name="dob", id="dob" placeholder="1990-01-01">
+          </div>`;
+  html += `<div class="form-group">
+          <label for="i">Select image</label>
+          <input type="file" accept="image/*" class="form-control" name="image", id="i">
+          </div>`;
+
+  document.getElementById("form_inputs").innerHTML = html;
+
+  openCreateForm();
 }
 
 function onAuthorDeleteBtnClicked(e) {
@@ -80,7 +153,7 @@ function showAuthors(authors) {
     </tr>`;
   }
   authorsTable.innerHTML = html;
-  
+
   for (i = 0; i < authors.length; i++) {
     document
       .getElementById(`btn_delete_${authors[i]._id}`)
@@ -125,6 +198,8 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
 addAuthorBtn.addEventListener("click", onAddAuthorBtnClicked);
 refreshAuthorsBtn.addEventListener("click", onRefreshAuthorsBtnClicked);
 logoutBtn.addEventListener("click", onLogoutBtnClicked);
+closeFormBtn.addEventListener("click", closeCreateForm);
+submitFormBtn.addEventListener("click", onCreateFormSubmit);
 
 // --------------------------------------------------------------------
 

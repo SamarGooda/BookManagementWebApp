@@ -121,17 +121,6 @@ router.get("/", function (req, res) {
   }
 });
 
-// router.post("/logout", async (request, response) => {
-//   const token = request.cookies.token;
-//   console.log("token is: ", token);
-//   try {
-//     jwt.destroy(token);
-//   } catch (e) {
-//     console.log(e);
-//   }
-//   response.status(201).send();
-// });
-
 router.post("/login", async (request, response) => {
   // console.log(request.body);
 
@@ -162,30 +151,6 @@ router.post("/login", async (request, response) => {
     response.status(401).send();
   }
 });
-
-// -----------------------------------------------------------------------
-
-// error handler
-// router.use(function (err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get("env") === "development" ? err : {};
-
-//   // render the error page
-//   res.status(err.status || 500);
-//   switch (res.status) {
-//     case 401:
-//       res.send("4000000000000000001111");
-//       // res.set("Content-Type", "text/html");
-//       // res.sendFile(path.resolve("../client/_site/html/admin_panel/login.html"));
-//       break;
-//     case 404:
-//       res.send("4000000000000000004");
-//       break;
-//     default:
-//       res.send(err);
-//   }
-// });
 
 // -----------------------------------------------------------------------
 
