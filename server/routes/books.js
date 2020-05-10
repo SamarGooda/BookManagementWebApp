@@ -54,7 +54,11 @@ const Book = require('../models/Book')
   router.delete('/data/:id', async(req, res, next) => {
     try {
         const book_data = await Book.findByIdAndRemove(req.params.id)
+        // const book_data = await Book.findByIdAndDelete(
+        //   request.params.id
+        // );
         return res.json(book_data)
+
     } catch (err) {
         next(err)
     }
