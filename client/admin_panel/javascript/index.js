@@ -8,6 +8,38 @@ const submitFormBtn = document.getElementById("submitFormBtn");
 
 const BASE_URL = "http://localhost:5000";
 
+let selectedTab = 0; //0 : categories, 1: books, 2: authors
+
+// --------------------------------------------------------------------
+
+function onCreateNewAuthor() {
+  var formData = new FormData();
+  formData.append("image", document.getElementById("i").files[0]);
+  formData.append("f", document.getElementById("fname").value);
+  formData.append("l", document.getElementById("lname").value);
+  formData.append("dob", document.getElementById("dob").value);
+
+  axios
+    .post(BASE_URL + "/authors", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then(function (response) {
+      console.log("response: " + JSON.stringify(response));
+      getAllAuthors();
+    })
+    .catch(function (error) {
+      console.log("error:", error);
+      alert("Could not create Author!");
+    });
+
+  document.getElementById("fname").value = "";
+  document.getElementById("lname").value = "";
+  document.getElementById("dob").value = "";
+  document.getElementById("i").value = "";
+}
+
 // --------------------------------------------------------------------
 function openCreateForm() {
   document.getElementById("light").style.display = "block";
@@ -22,40 +54,21 @@ function closeCreateForm() {
 function onCreateFormSubmit(e) {
   e.preventDefault();
 
-  // authorFName = document.getElementById("fname");
-  // authorLName = document.getElementById("lname");
-  // authorDoB = document.getElementById("dob");
-  // authorImage = document.getElementById("i");
+  closeCreateForm();
 
-  var formData = new FormData();
-  var imagefile = document.getElementById("i");
-  formData.append("image", imagefile.files[0]);
-
-  formData.append("f", document.getElementById("fname").value);
-  formData.append("l", document.getElementById("lname").value);
-  formData.append("dob", document.getElementById("dob").value);
-
-  axios
-    .post(BASE_URL + "/authors", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-    .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
-    })
-    .catch(function (error) {
-      console.log("error:", error);
-    });
-
-  // axios
-  //   .post(BASE_URL + "/authors", body)
-  //   .then(function (response) {
-  //     console.log("response: " + JSON.stringify(response));
-  //   })
-  //   .catch(function (error) {
-  //     console.log("error:", error);
-  //   });
+  switch (selectedTab) {
+    case 0:
+      onCreateNewCategory();
+      break;
+    case 1:
+      onCreateNewBook();
+      break;
+    case 1:
+      onCreateNewAuthor();
+      break;
+    default:
+      break;
+  }
 }
 
 // --------------------------------------------------------------------
@@ -87,6 +100,8 @@ function onAddAuthorBtnClicked(e) {
   document.getElementById("form_inputs").innerHTML = html;
 
   openCreateForm();
+
+  console.log($(".nav-tabs .active").id);
 }
 
 function onAuthorDeleteBtnClicked(e) {
@@ -111,6 +126,7 @@ function onLogoutBtnClicked(e) {
   document.cookie = "token" + "=; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
   window.location.replace("/admin");
 }
+
 // --------------------------------------------------------------------
 
 function showAdminData() {
@@ -130,6 +146,7 @@ function showAdminData() {
 }
 
 // --------------------------------------------------------------------
+
 function getFormattedDate(dateStr) {
   const d = new Date(dateStr);
   const ye = new Intl.DateTimeFormat("en", { year: "numeric" }).format(d);
@@ -137,6 +154,8 @@ function getFormattedDate(dateStr) {
   const da = new Intl.DateTimeFormat("en", { day: "2-digit" }).format(d);
   return `${da}-${mo}-${ye}`;
 }
+
+// --------------------------------------------------------------------
 
 function showAuthors(authors) {
   let html = "";
@@ -160,6 +179,11 @@ function showAuthors(authors) {
       .addEventListener("click", onAuthorDeleteBtnClicked);
   }
 }
+
+function showBooks() {}
+
+function showCategories() {}
+
 // --------------------------------------------------------------------
 
 function getAllAuthors() {
@@ -178,16 +202,21 @@ function getAllAuthors() {
 
 function getAllCategories() {}
 
+function getAllBooks() {}
+
 // --------------------------------------------------------------------
 $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
   switch (e.currentTarget.id) {
     case "books-tab":
+      selectedTab = 1;
       getAllBooks();
       break;
     case "authors-tab":
+      selectedTab = 2;
       getAllAuthors();
       break;
     case "categories-tab":
+      selectedTab = 0;
       getAllCategories();
       break;
     default:

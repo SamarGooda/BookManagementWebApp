@@ -58,10 +58,10 @@
 .white_content {
   display: none;
   position: absolute;
-  top: 25%;
+  top: 15%;
   left: 25%;
   width: 50%;
-  height: 50%;
+  height: 75%;
   padding: 16px;
   /* border: 16px solid orange; */
   background-color: white;
