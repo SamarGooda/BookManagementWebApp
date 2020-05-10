@@ -67,7 +67,7 @@ function getFormattedDate(dateStr) {
 
 function showAuthors(authors) {
   let html = "";
-  for (i = 0; i < authors.length ; i++) {
+  for (i = 0; i < authors.length; i++) {
     html += `<tr>
     <th scope="row">${i + 1}</th>
     <td>${authors[i].first_name}</td>
@@ -77,19 +77,17 @@ function showAuthors(authors) {
     <td><button class="btn btn-danger" id="btn_delete_${
       authors[i]._id
     }"><i class="fa fa-trash"></i></button></td>
-  </tr>`;
+    </tr>`;
   }
   authorsTable.innerHTML = html;
-
-  for (i = 0; i < authors.length ; i++) {
+  
+  for (i = 0; i < authors.length; i++) {
     document
       .getElementById(`btn_delete_${authors[i]._id}`)
       .addEventListener("click", onAuthorDeleteBtnClicked);
   }
 }
 // --------------------------------------------------------------------
-
-function getAllBooks() {}
 
 function getAllAuthors() {
   axios
