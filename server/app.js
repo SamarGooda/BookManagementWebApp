@@ -6,6 +6,9 @@ const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const auth = require('./middlewares/auth');
+
+
 const usersRouter = require("./routes/users");
 const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/books");
