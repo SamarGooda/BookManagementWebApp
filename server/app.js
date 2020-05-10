@@ -34,7 +34,6 @@ mongoose.connect(
 app.get("/stylecheets/default.css", function (req, res) {
   res.set("Content-Type", "text/css");
   res.sendFile(path.resolve("../client/_site/stylecheets/default.css"));
-  
 });
 
 app.use(cors());
@@ -54,13 +53,15 @@ app.use("/reviews", reviewsRouter);
 app.use("/rates", ratesRouter);
 app.use("/images", imagesRouter);
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
+// // catch 404 and forward to error handler
+// app.use(function (req, res, next) {
+//   next(createError(404));
+// });
 
 // error handler
 app.use(function (err, req, res, next) {
+  console.log(err);
+
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
@@ -78,7 +79,5 @@ app.use(function (err, req, res, next) {
       res.send(err);
   }
 });
-
-
 
 module.exports = app;

@@ -1,6 +1,14 @@
 const express = require("express");
 const router = express.Router();
+var multer = require("multer");
+
 const authorModel = require("../models/Author");
+const upload = multer({ dest: "../tmp" });
+
+const { promisify } = require("util");
+const fs = require("fs");
+const mv = promisify(fs.rename);
+const rm = promisify(fs.unlink);
 
 // ==========================================================================
 
@@ -28,19 +36,24 @@ router.get("/:id", async (request, response) => {
 
 // ==========================================================================
 
-router.post("/", async (request, response) => {
+router.post("/", upload.single("image"), async (request, response) => {
   const { f, l, dob, i } = request.body;
   console.log("request.body: ", request.body);
+  console.log("request.file: ", request.file);
 
   const new_author = new authorModel({
     first_name: f,
     last_name: l,
     date_of_birth: dob,
-    image: i,
+    image: "/images/authors/" + request.file.filename,
   });
 
   try {
     const saved_author = await new_author.save();
+    await mv(
+      __dirname + "/../../" + "tmp/" + request.file.filename,
+      __dirname + "/../" + "public/authors/" + request.file.filename + ".png"
+    );
     response.json(saved_author);
   } catch (error) {
     console.log(error);
@@ -52,7 +65,6 @@ router.post("/", async (request, response) => {
 
 router.patch("/:id", async (request, response) => {
   const { f, l, dob, i } = request.body;
-
 
   try {
     const author = await authorModel.findById(request.params.id);
@@ -77,11 +89,15 @@ router.patch("/:id", async (request, response) => {
 
 router.delete("/:id", async (request, response) => {
   try {
-    console.log("I am here");
-
     const deleted_author = await authorModel.findByIdAndDelete(
       request.params.id
     );
+
+    let imgFileName = deleted_author.image.split("/")[3];
+    console.log("imgFileName: ", imgFileName);
+
+    await rm(__dirname + "/../" + "public/authors/" + imgFileName + ".png");
+
     response.json(deleted_author);
   } catch (error) {
     console.log(error);
@@ -91,4 +107,3 @@ router.delete("/:id", async (request, response) => {
 // ==========================================================================
 
 module.exports = router;
-
