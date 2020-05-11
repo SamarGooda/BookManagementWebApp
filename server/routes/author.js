@@ -89,11 +89,15 @@ router.patch("/:id", async (request, response) => {
 
 router.delete("/:id", async (request, response) => {
   try {
-    console.log("I am here");
-
     const deleted_author = await authorModel.findByIdAndDelete(
       request.params.id
     );
+
+    let imgFileName = deleted_author.image.split("/")[3];
+    console.log("imgFileName: ", imgFileName);
+
+    await rm(__dirname + "/../" + "public/authors/" + imgFileName + ".png");
+
     response.json(deleted_author);
   } catch (error) {
     console.log(error);
