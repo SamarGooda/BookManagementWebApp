@@ -72,6 +72,21 @@ router.use((req, res, next) => {
 
 // ----------------------------------------------------------------
 
+router.get("/javascript/authors.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/admin_panel/javascript/authors.js"));
+});
+
+router.get("/javascript/books.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/admin_panel/javascript/books.js"));
+});
+
+router.get("/javascript/categories.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/admin_panel/javascript/categories.js"));
+});
+
 router.get("/javascript/index.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
   res.sendFile(path.resolve("../client/_site/admin_panel/javascript/index.js"));
