@@ -53,7 +53,7 @@ router.delete("/data/:id", async (req, res, next) => {
 });
 
 router.patch("/data/:id", async (req, res, next) => {
-  const { title, image, author, category } = req;
+  const { title, image, author, category } = req.body;
 
   try {
     const book = await Book.findById(req.params.id);
@@ -64,7 +64,7 @@ router.patch("/data/:id", async (req, res, next) => {
       if (image) book.image = image;
 
       const saved_book = await book.save();
-      res.json(book);
+      res.json(saved_book);
     } else {
       res.status(400).send();
     }
