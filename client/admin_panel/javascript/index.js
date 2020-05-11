@@ -1,5 +1,9 @@
 const addAuthorBtn = document.getElementById("add_author_btn");
 const refreshAuthorsBtn = document.getElementById("refresh_authors_btn");
+
+const addBookBtn = document.getElementById("add_book_btn");
+const refreshBooksBtn = document.getElementById("refresh_books_btn");
+
 const authorsTable = document.getElementById("authorstable");
 const bookstable = document.getElementById("bookstable");
 const adminEmailLabel = document.getElementById("adminEmail");
@@ -129,6 +133,8 @@ function onAuthorDeleteBtnClicked(e) {
     });
 }
 
+// --------------------------------------------------------------------
+
 function onRefreshBooksBtnClicked(e) {
   getAllAuthors();
 }
@@ -254,7 +260,7 @@ function showBooks(books) {
   }
   bookstable.innerHTML = html;
 
-  for (i = 0; i < authors.length; i++) {
+  for (i = 0; i < books.length; i++) {
     document
       .getElementById(`btn_delete_${books[i]._id}`)
       .addEventListener("click", onBookDeleteBtnClicked);
@@ -317,6 +323,9 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
 
 addAuthorBtn.addEventListener("click", onAddAuthorBtnClicked);
 refreshAuthorsBtn.addEventListener("click", onRefreshAuthorsBtnClicked);
+addBookBtn.addEventListener("click", onAddBookBtnClicked);
+refreshBooksBtn.addEventListener("click", onRefreshBooksBtnClicked);
+
 logoutBtn.addEventListener("click", onLogoutBtnClicked);
 closeFormBtn.addEventListener("click", closeCreateForm);
 submitFormBtn.addEventListener("click", onCreateFormSubmit);
