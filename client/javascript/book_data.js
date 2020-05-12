@@ -1,6 +1,7 @@
 
 // const image = document.getElementById("image")
 const details = document.getElementById("details")
+const review_views = document.getElementById("review_details")
 const save = document.getElementById("save")
 const review = document.getElementById("review")
 const book_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
@@ -37,8 +38,11 @@ function showBook(book_detail) {
                           <h4 class="card-title">${book_detail.title}</h4>
                            <a href="#" class="btn " style="color: blue; ">by BookAuthor: ${book_detail.author.first_name}</a><br>
                            <a href="#" class="btn " style="color: blue;">Category Name: ${book_detail.category} </a></div>`
+  for (i = 0; i < book_detail.reviews.length ; i++) {                        
+  review_views.innerHTML += `<p>${book_detail.reviews[i].user.first_name}<br>${book_detail.reviews[i].review}</p>`                       
   console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
   // review.innerHTML = `<p>${book_detail.title}</p>`
+  }
 
 }
 
@@ -50,6 +54,7 @@ function save_review() {
       console.log("response: " + JSON.stringify(response));
       let review_detail = response.data;
       console.log("review_detail:", review_detail);
+      review.value=""
     })
     .catch(function (error) {
       if (error.response) {
@@ -60,8 +65,6 @@ function save_review() {
         else {
           console.log("error:", error);
         }
-
-
       }
     })
 }
