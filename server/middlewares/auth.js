@@ -1,7 +1,7 @@
 const express = require('express');
-const helper = require('../helpers/auth_helper');
+const helpers = require('../helpers/general_helpers');
+const auth_helper = require('../helpers/auth_helper');
 const jwt = require('jsonwebtoken')
-
 const jwtKey = 'very_hard_secret_key'
 const jwtExpirySeconds = 300
 
@@ -12,7 +12,7 @@ function auth(req, res, next) {
 
     // if the cookie is not set, return an unauthorized error
     if (!token) {
-        return signIn(req,res);
+        return res.json({ status: 0, message: "user not signed in" });
     }
 
     var payload
@@ -25,10 +25,10 @@ function auth(req, res, next) {
     } catch (e) {
         if (e instanceof jwt.JsonWebTokenError) {
             // if the error thrown is because the JWT is unauthorized, return a 401 error
-            return res.status(401).end()
+            return 
         }
         // otherwise, return a bad request error
-        return res.status(400).end()
+        return helpers.handleError(res)
     }
 
     // Finally, return the welcome message to the user, along with their

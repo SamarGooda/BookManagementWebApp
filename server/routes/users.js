@@ -7,12 +7,53 @@ const { promisify } = require('util');
 const mv = promisify(fs.rename);
 const rm = promisify(fs.unlink);
 
-const UserModel = require('../models/User')
+const auth = require('../middlewares/auth');
 
+const UserModel = require('../models/User');
 
+const db_helpers = require('../helpers/db_helpers');
+const helpers = require('../helpers/general_helpers');
+
+// helper functions
+function getUserId(token) {
+    console.log("getUserId ======================>");
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, jwtKey);
+            console.log("decoded", decoded);
+            return decoded.payload;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    return undefined;
+}
+
+// =================================================
+
+// get current logined user data
+router.get("/data", async function (req, res) {
+    const token = req.cookies.token;
+    console.log("token is: ", token);
+    let userId = getUserId(token);
+    console.log("userId: " + userId);
+    if (!userId) {
+        res.status(400).send();
+    } else {
+        const user = await UserModel.findById(userId);
+        const data = {
+            email: user.email,
+
+        }
+        res.json();
+    }
+});
+// =====================================================================
 
 // REST
 
+// get all users
 router.get('/', async (req, res) => {
     try {
         users = await UserModel.find({});
@@ -23,19 +64,22 @@ router.get('/', async (req, res) => {
     return res.json(users);
 });
 
+// set upload to use multer 
+
 const upload = multer({
-    dest: "server/tmp/"
+    dest: "tmp/"
     // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
 
+// add new user
 router.post('/', upload.single("image"), async (req, res, next) => {
 
     const { first_name, last_name, password, email } = req.body;
     try {
-        if (req.file === undefined) return next(new Error('No image submitted'))
+        if (req.file === undefined) return helpers.handleError(res, "profile picture required")
 
         const fileExt = path.extname(req.file.originalname).toLowerCase();
-        const tempPath = req.file.path;
+        const tempPath = path.join(__dirname, "..", req.file.path);
         const fileName = email + fileExt;
         const relativePath = `/public/users/${fileName}`;
         const targetPath = path.join(__dirname, "..", relativePath);
@@ -57,13 +101,13 @@ router.post('/', upload.single("image"), async (req, res, next) => {
     }
     catch (err) {
         console.error(err)
-        const msg = { status: 0, message: "Error while saving record, might be duplicate email or missing info" }    //'Error while saving record'
-        handleError(err, msg, res, next)
-        return res.json(msg);
+        const msg = "Error while saving record"
+        return helpers.handleError(res, msg);
     }
 });
 
-router.get('/:id', async (req, res) => {
+// get specific user data by id ** uses _id of db
+router.get('/:id', auth, async (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
 
@@ -72,119 +116,39 @@ router.get('/:id', async (req, res) => {
     try {
         return res.json(user);
     } catch (err) {
-        return res.send(err['message']);
+        return helpers.handleError(res);
     }
 });
 
-
+// edit user data
 router.patch('/:id', (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
     UserModel.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true }, (err, user) => {
         if (!err) return res.json({ result: "success", data: user });
-        else return res.send(err['message']);
+        else {
+            console.error(err);
+            helpers.handleError(res);
+        }
     });
 })
+
+// delete user
 
 router.delete('/:id', async (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
-    user = await UserModel.findOneAndDelete({ _id: id });
     try {
-        return res.json(user);
+        user = await UserModel.findOneAndDelete({ _id: id });
+        if (user) return res.json(user);
+        return helpers.handleError(res, "user not found");
     }
     catch (err) {
-        return res.send(err['message']);
+        console.error(err);
+        return helpers.handleError(res);
     }
 })
 
-router.post('/login', async (req, res, next) => {
-    const { email, password } = req.body;
-    const user = await UserModel.findOne({ email: email });
-    // return 401 error is email or password doesn't exist, or if password does
-    // not match the password in our records
-    if (!user || !email || !password) return res.status(401).end()
-    try {
-        const isEqual = await bcrypt.compare(password, user.password);
-        console.log(isEqual);
-        if (isEqual) {
-            // Create a new token with the email in the payload
-            // and which expires 300 seconds after issue
-            const token = jwt.sign({ email }, jwtKey, {
-                algorithm: 'HS256',
-                expiresIn: jwtExpirySeconds
-            })
-            console.log('token:', token)
-
-            // set the cookie as the token string, with a similar max age as the token
-            // here, the max age is in milliseconds, so we multiply by 1000
-            res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 })
-            return res.send("You are now signed in.")
-        }
-        else return res.status(401).end()
-    }
-    catch (err) {
-        console.log(err)
-        res.json({ status: "error", data: "something went wrong." });
-    }
-})
-
-// =================================================================
-
-
-// routes for static files
-
-router.get('/javascript/users.js', (req, res) => {
-    res.set("Content-Type", "text/javascript");
-    res.sendFile(path.resolve("../client/_site/users/javascript/users.js"));
-})
-
-router.get('/stylesheets/users.css', (req, res) => {
-    res.set("Content-Type", "text/css");
-    res.sendFile(path.resolve("../client/_site/users/stylesheets/users.css"));
-})
-
-// =================================================================
-
-// logic routes
-
-router.get('/', (req, res) => {
-    res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/users/html/index.html"));
-})
-
-router.get('/registration', (req, res) => {
-    res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/users/html/registration.html"));
-})
-
-
-
-router.post('/registration/submit', async (req, res, next) => {
-    // escape if there's no picture submitted
-    const { first_name, last_name, password, email } = req.body;
-
-
-
-})
-
-router.get('/forgot_password', (req, res) => {
-    res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/users/html/forgot_password.html"));
-})
-
-router.get('/login', (req, res) => {
-    res.set("Content-Type", "text/html");
-    res.sendFile(path.resolve("../client/_site/users/html/login.html"));
-})
-
-const handleError = (err, msg, res, next) => {
-    console.log("something went wrong 'handleError' function here")
-    // res
-    //     .status(500)
-    //     .contentType("text/plain")
-    //     .send(msg);
-    next()
-};
+// =================================================
 
 module.exports = router
