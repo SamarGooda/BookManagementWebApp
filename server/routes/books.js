@@ -37,7 +37,16 @@ const Book = require('../models/Book')
   router.get('/data/:id', async(req, res,next) => {
     try {
       
-        const book_data = await Book.findById(req.params.id).populate('author').populate('category');
+        const book_data = await Book.findById(req.params.id).populate('author').populate({
+          path : 'reviews',
+          populate : {
+            path : 'user'
+          }
+        })
+        
+        
+        // populate('category');
+        
         if (book_data) 
          {
           return res.json(book_data)
@@ -58,7 +67,7 @@ const Book = require('../models/Book')
 
   router.delete('/data/:id', async(req, res, next) => {
     try {
-        const book_data = await Book.findByIdAndRemove(req.params.id)
+        const book_data = await Book.findByIdAndRemove({})
         // const book_data = await Book.findByIdAndDelete(
         //   request.params.id
         // );
@@ -68,6 +77,19 @@ const Book = require('../models/Book')
         next(err)
     }
   })
+
+  // router.delete('/data', async(req, res, next) => {
+  //   try {
+  //       const book_data = await Book.findAndRemove(req.params.id)
+  //       // const book_data = await Book.findByIdAndDelete(
+  //       //   request.params.id
+  //       // );
+  //       return res.json(book_data)
+
+  //   } catch (err) {
+  //       next(err)
+  //   }
+  // })
 
 
   router.patch('/data/:id', async(req, res,next) => {
