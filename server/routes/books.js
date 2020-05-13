@@ -73,10 +73,16 @@ router.get("/avg/:id", async (request, response) => {
       return response.status(404).send();
     }
     const query = { book: request.params.id };
-    const book_rate = await Rate.find(query)
-    console.log(book_rate)
-    // const avg_rate = 
-    response.json(rate);
+    const book_rates = await Rate.find(query)
+    let sum = 0
+    for (i=0; i< book_rates.length ; i++)
+    {
+      
+      sum += book_rates[i].rate 
+    }
+    const avg_rate =  sum / book_rates.length
+    console.log(book_rates)
+    response.json(avg_rate);
   } catch (error) {
     console.log(error);
     response.status(400).send();
