@@ -33,16 +33,16 @@ router.post("/", async (request, response) => {
   const { r, u, b } = request.body;
   console.log("request.body: ", request.body);
 
-  const book = booksModel.findById(b);
-  const user = usersModel.findById(u);
+  const book = await booksModel.findById(b);
+  const user = await usersModel.findById(u);
   if (!book || !user) {
     return response.status(400).send();
   }
 
   const new_rate = new ratesModel({
     rate: r,
-    u: u,
-    b: b,
+    user: u,
+    book: b,
   });
 
   try {
@@ -60,8 +60,8 @@ router.patch("/:id", async (request, response) => {
   const { r, u, b } = request.body;
   console.log("request.body: ", request.body);
 
-  const book = booksModel.findById(b);
-  const user = usersModel.findById(u);
+  const book = await booksModel.findById(b);
+  const user = await usersModel.findById(u);
   if (!book || !user) {
     return response.status(400).send();
   }
