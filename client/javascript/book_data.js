@@ -40,6 +40,7 @@ function showBook(book_detail) {
                            <a href="#" class="btn " style="color: blue;">Category Name: ${book_detail.category} </a></div>`
   for (i = 0; i < book_detail.reviews.length ; i++) {                        
   review_views.innerHTML += `<p>${book_detail.reviews[i].user.first_name}`+":"+`${book_detail.reviews[i].review}</p>`                       
+  
   console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
   // review.innerHTML = `<p>${book_detail.title}</p>`
   }
