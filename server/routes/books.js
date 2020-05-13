@@ -1,56 +1,120 @@
 const express = require("express");
 const router = express.Router();
 var path = require("path");
-const Book = require("../models/Book");
+const Book = require('../models/Book')
+const Rate = require('../models/book_rate')
 
-router.post("/", async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   //  const { id } = req.params
   // res.send("creating user with id = 5")
-  const { title, image, author, category } = req.body;
-  const books = new Book({ title, image, author, category });
+  const { title, image, author, category } = req.body
+  const books = new Book({ title, image, author, category })
   try {
-    const book_data = await books.save();
-    return res.json(book_data);
+    const book_data = await books.save()
+    return res.json(book_data)
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
-router.get("/data", async (req, res, next) => {
+router.get('/data', async (req, res, next) => {
   try {
-    const books = await Book.find({}).populate("author");
+    const books = await Book.find({}).populate('author').populate({
+      path: 'reviews',
+      populate: {
+        path: 'user'
+      }
+    })
     // .populate('category')
 
-    return res.json(books);
-  } catch (err) {
-    next(err);
-  }
-});
 
-router.get("/data/:id", async (req, res, next) => {
+    return res.json(books)
+  } catch (err) {
+    next(err)
+  }
+})
+
+
+router.get('/data/:id', async (req, res, next) => {
   try {
-    const book_data = await Book.findById(req.params.id)
-      .populate("author")
-      .populate("category");
+
+    const book_data = await Book.findById(req.params.id).populate('author').populate({
+      path: 'reviews',
+      populate: {
+        path: 'user'
+      }
+    })
+
+
+    // populate('category');
+
     if (book_data) {
-      return res.json(book_data);
-    } else {
+      return res.json(book_data)
+    }
+    else {
       return res.status(404).send();
     }
-  } catch (err) {
-    console.log("errrrrr:", err);
-    next(err);
-  }
-});
 
-router.delete("/data/:id", async (req, res, next) => {
-  try {
-    const book_data = await Book.findByIdAndDelete(req.params.id);
-    return res.json(book_data);
+
   } catch (err) {
-    next(err);
+    console.log("errrrrr:", err)
+    next(err)
+  }
+
+})
+///////////////////////////////////////////////////////////////////////////////////////
+
+// rate for book
+router.get("/avg/:id", async (request, response) => {
+
+  try {
+    const book_data = await Book.findById(request.params.id)
+    if(! book_data){
+      return response.status(404).send();
+    }
+    const query = { book: request.params.id };
+    const book_rates = await Rate.find(query)
+    let sum = 0
+    for (i=0; i< book_rates.length ; i++)
+    {
+      
+      sum += book_rates[i].rate 
+    }
+    const avg_rate =  sum / book_rates.length
+    console.log(book_rates)
+    response.json(avg_rate);
+  } catch (error) {
+    console.log(error);
+    response.status(400).send();
   }
 });
+/////////////////////////////////////////////////////////////////////////////////////////////
+router.delete('/data/:id', async (req, res, next) => {
+  try {
+    const book_data = await Book.findByIdAndRemove({})
+    // const book_data = await Book.findByIdAndDelete(
+    //   request.params.id
+    // );
+    return res.json(book_data)
+
+  } catch (err) {
+    next(err)
+  }
+})
+
+// router.delete('/data', async(req, res, next) => {
+//   try {
+//       const book_data = await Book.findAndRemove(req.params.id)
+//       // const book_data = await Book.findByIdAndDelete(
+//       //   request.params.id
+//       // );
+//       return res.json(book_data)
+
+//   } catch (err) {
+//       next(err)
+//   }
+// })
+
 
 router.patch("/data/:id", async (req, res, next) => {
   const { title, image, author, category } = req.body;

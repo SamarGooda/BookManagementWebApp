@@ -39,7 +39,7 @@ function showBooks(books) {
     let div = `<div class="col-sm-3">
         <div class="card">
         <div class="card-body"><img class="card-img-top" src=${books[i].image}  style="width:100%" ><br>
-        <a href=localhost:5000/books/${books[i]._id}  class="btn " > ${books[i].title}</a><br>
+        <a href=http://localhost:5000/books/${books[i]._id}  class="btn " > ${books[i].title}</a><br>
         <a href=${books[i].author.first_name} class="btn " >${books[i].author.first_name} </a></div></div></div>`;
     items.innerHTML += div;
   }

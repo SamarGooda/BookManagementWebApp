@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
   rate: dbHelpers.rateValueValidation,
   user: dbHelpers.userValidation,
   book: dbHelpers.bookValidation,
-});
+}).index({ 'user': 1, 'book': 1 }, { unique: true });
 
 schema.pre("save", async function (next) {
   try {
