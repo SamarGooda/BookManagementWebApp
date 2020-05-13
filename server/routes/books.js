@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 var path = require("path");
 const Book = require('../models/Book')
  
@@ -92,17 +92,28 @@ const Book = require('../models/Book')
   // })
 
 
-  router.patch('/data/:id', async(req, res,next) => {
-    const { body: { title,image,author,category } } = req
-    try {
-        const book_data = await Book.findByIdAndUpdate(req.params.id, { title,image,author,category })
-        return res.json(book_data)
-    } catch (err) {
-         next(err)
-    }
-  })
+router.patch("/data/:id", async (req, res, next) => {
+  const { title, image, author, category } = req.body;
 
-  
+  try {
+    const book = await Book.findById(req.params.id);
+    if (book) {
+      if (title) book.title = title;
+      if (author) book.author = author;
+      if (category) book.category = category;
+      if (image) book.image = image;
+
+      const saved_book = await book.save();
+      res.json(saved_book);
+    } else {
+      res.status(400).send();
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
+  }
+});
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // routes for books_page
@@ -115,14 +126,12 @@ router.get("/javascript/books.js", function (req, res) {
 router.get("/stylecheets/books.css", function (req, res) {
   res.set("Content-Type", "text/css");
   res.sendFile(path.resolve("../client/_site/stylecheets/books.css"));
-  
 });
 
 router.get("/", function (req, res) {
   res.set("Content-Type", "text/html");
   res.sendFile(path.resolve("../client/_site/html/books/books.html"));
 });
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -135,16 +144,11 @@ router.get("/:id", function (req, res) {
 router.get("/stylecheets/book_data.css", function (req, res) {
   res.set("Content-Type", "text/css");
   res.sendFile(path.resolve("../client/_site/stylecheets/book_data.css"));
-  
 });
 
 router.get("/javascript/book_data.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
   res.sendFile(path.resolve("../client/_site/javascript/book_data.js"));
-  
 });
 
-
-
-
-module.exports = router
+module.exports = router;
