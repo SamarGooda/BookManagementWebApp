@@ -36,7 +36,7 @@ const signIn = async (req, res) => {
 
         // set the cookie as the token string, with a similar max age as the token
         // here, the max age is in milliseconds, so we multiply by 1000
-        res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 });
+        res.cookie('user_token', token, { maxAge: jwtExpirySeconds * 1000 });
         return res.json({ status: 1, message: "sign in success" });;
       } else return helpers.handleError(res, "invalid email or password");
     }
@@ -48,7 +48,7 @@ const signIn = async (req, res) => {
 
 const refresh = (req, res) => {
   // (BEGIN) The code uptil this point is the same as the first part of the `welcome` route
-  const token = req.cookies.token;
+  const token = req.cookies.user_token;
 
   if (!token) {
     return res.status(401).end();

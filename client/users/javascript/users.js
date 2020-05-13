@@ -1,3 +1,27 @@
+// function to serialize object
+$.fn.serializeObject = function () {
+	var o = {};
+	var a = this.serializeArray();
+	$.each(a, function () {
+		if (o[this.name] !== undefined) {
+			if (!o[this.name].push) {
+				o[this.name] = [o[this.name]];
+			}
+			o[this.name].push(this.value || '');
+		} else {
+			o[this.name] = this.value || '';
+		}
+	});
+	return o;
+};
+
+async function sendAjaxRequest(url, method) {
+	// await code here
+	let result = await makeRequest("GET", url);
+	// code below here will only execute when await makeRequest() finished loading
+	console.log(result);
+}
+//===================
 (function ($) {
 	$(document).ready(function () {
 		"use strict";
@@ -18,8 +42,11 @@
 		// Validation
 		$("#login-form").validate({
 			rules: {
-				lg_username: "required",
-				lg_password: "required",
+				email: {
+					required: true,
+					email: true
+				},
+				password: "required",
 			},
 			errorClass: "form-invalid"
 		});
@@ -31,7 +58,7 @@
 			if (options['useAJAX'] == true) {
 				// Dummy AJAX request (Replace this with your AJAX code)
 				// If you don't want to use AJAX, remove this
-				dummy_submit_form($(this));
+				submit_form('http://localhost:5000/auth/login',$(this));
 
 				// Cancel the normal submission.
 				// If you don't want to use AJAX, remove this
@@ -79,28 +106,27 @@
 		var filenumber = 1;
 		$('#image').rules('add', {
 			required: true,  // <- with this you would not need 'required' attribute on input
-			accept: "image/jpeg, image/pjpeg"
+			// accept: "image/jpeg, image/pjpeg"
 		});
 
 		// Form Submission
-		$('#register-form')
-			.ajaxForm({
-				url: '127.0.0.1:5000/users/registration/submit',
-				type: "POST",
-				dataType: 'json',
-				success: function (response) {
-					alert("The server says: " + response);
-				}
-			})
-			;
+		// $('#register-form')
+		// 	.ajaxForm({
+		// 		url: '127.0.0.1:5000/users',
+		// 		type: "POST",
+		// 		dataType: 'json',
+		// 		success: function (response) {
+		// 			alert("The server says: " + response);
+		// 		}
+		// 	})
+		// 	;
 		$("#register-form").submit(function (e) {
 			// e.preventDefault();
 			remove_loading($(this));
 
 			if (options['useAJAX'] == true) {
-				// Dummy AJAX request (Replace this with your AJAX code)
 				// If you don't want to use AJAX, remove this
-				dummy_submit_form($(this));
+				submit_form('http://localhost:5000/users/data/', $(this));
 
 				// Cancel the normal submission.
 				// If you don't want to use AJAX, remove this
@@ -127,7 +153,7 @@
 			if (options['useAJAX'] == true) {
 				// Dummy AJAX request (Replace this with your AJAX code)
 				// If you don't want to use AJAX, remove this
-				dummy_submit_form($(this));
+				submit_form($(this));
 
 				// Cancel the normal submission.
 				// If you don't want to use AJAX, remove this
@@ -159,9 +185,22 @@
 		// Dummy Submit Form (Remove this)
 		//----------------------------------------------
 		// This is just a dummy form submission. You should use your AJAX function or remove this function if you are not using AJAX.
-		function dummy_submit_form($form) {
+		function submit_form(url, $form) {
 			if ($form.valid()) {
 				form_loading($form);
+				console.log(JSON.stringify($('form').serializeObject()))
+				fetch(url, {
+					method: 'post',
+					// mode: 'cors',
+					headers: {
+						'Content-Type': 'application/json',  // sent request
+						'Accept': 'application/json'   // expected data sent back
+					},
+					body: JSON.stringify($('form').serializeObject())
+				})
+					.then((res) => console.log(res))
+					.then((data) => console.log(data))
+					.catch((error) => console.log(error))
 
 				setTimeout(function () {
 					form_success($form);
@@ -169,5 +208,22 @@
 			}
 		}
 	})
+	$(document).on('submit', function (e) {
+		e.preventDefault();
+
+		// var form = $(this).parent().closest('form');
+		// var action = form.attr('action');
+		// var data = form.serialize();
+
+
+		// $.ajax({
+		// 	type: 'POST',
+		// 	url: action,
+		// 	data: data,
+		// 	success: function () {
+		// 		loadPrefs('resources');
+		// 	}
+		// });
+	});
 
 })(jQuery); 

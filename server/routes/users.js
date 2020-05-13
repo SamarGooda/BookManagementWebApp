@@ -7,7 +7,7 @@ const { promisify } = require('util');
 const mv = promisify(fs.rename);
 const rm = promisify(fs.unlink);
 
-const auth = require('../middlewares/auth');
+// const auth = require('../middlewares/auth');
 
 const UserModel = require('../models/User');
 
@@ -15,28 +15,15 @@ const db_helpers = require('../helpers/db_helpers');
 const helpers = require('../helpers/general_helpers');
 
 // helper functions
-function getUserId(token) {
-    console.log("getUserId ======================>");
-    if (token) {
-        try {
-            const decoded = jwt.verify(token, jwtKey);
-            console.log("decoded", decoded);
-            return decoded.payload;
-        } catch (e) {
-            console.log(e);
-        }
-    }
 
-    return undefined;
-}
 
 // =================================================
 
 // get current logined user data
-router.get("/data", async function (req, res) {
+router.get("/current_user", async function (req, res) {
     const token = req.cookies.token;
     console.log("token is: ", token);
-    let userId = getUserId(token);
+    let userId = helpers.getUserId(token);
     console.log("userId: " + userId);
     if (!userId) {
         res.status(400).send();
@@ -50,11 +37,26 @@ router.get("/data", async function (req, res) {
     }
 });
 // =====================================================================
+// routes for static files
+
+router.get('/javascript/users.js', (req, res) => {
+    res.set("Content-Type", "text/javascript");
+    res.sendFile(path.resolve("../client/_site/users/javascript/users.js"));
+})
+
+router.get('/stylesheets/users.css', (req, res) => {
+    res.set("Content-Type", "text/css");
+    res.sendFile(path.resolve("../client/_site/users/stylesheets/users.css"));
+})
+
+// =================================================================
+
+
 
 // REST
 
 // get all users
-router.get('/', async (req, res) => {
+router.get('/data', async (req, res) => {
     try {
         users = await UserModel.find({});
     }
@@ -72,25 +74,13 @@ const upload = multer({
 });
 
 // add new user
-router.post('/', upload.single("image"), async (req, res, next) => {
+router.post('/data', upload.single("image"), async (req, res, next) => {
 
     const { first_name, last_name, password, email } = req.body;
     try {
-        if (req.file === undefined) return helpers.handleError(res, "profile picture required")
-
-        const fileExt = path.extname(req.file.originalname).toLowerCase();
-        const tempPath = path.join(__dirname, "..", req.file.path);
-        const fileName = email + fileExt;
+        const fileName = "default_profile_pic.jpg";
         const relativePath = `/public/users/${fileName}`;
         const targetPath = path.join(__dirname, "..", relativePath);
-
-        let flag;
-        // handle picture upload
-        if (fileExt === ".jpg" || fileExt === ".png") {
-            await mv(tempPath, targetPath);
-        } else {
-            await rm(tempPath);
-        }
 
         const userInstance = new UserModel({
             first_name, last_name, password, email, image: relativePath
@@ -107,7 +97,7 @@ router.post('/', upload.single("image"), async (req, res, next) => {
 });
 
 // get specific user data by id ** uses _id of db
-router.get('/:id', auth, async (req, res) => {
+router.get('/data/:id', async (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
 
@@ -121,7 +111,7 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // edit user data
-router.patch('/:id', (req, res) => {
+router.patch('/data/:id', (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
     UserModel.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true }, (err, user) => {
@@ -135,7 +125,7 @@ router.patch('/:id', (req, res) => {
 
 // delete user
 
-router.delete('/:id', async (req, res) => {
+router.delete('/data/:id', async (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
     try {
@@ -150,5 +140,26 @@ router.delete('/:id', async (req, res) => {
 })
 
 // =================================================
+
+// html routes
+router.get('/registration', (req, res) => {
+    res.set("Content-Type", "text/html");
+    res.sendFile(path.resolve("../client/_site/users/html/registration.html"));
+})
+
+router.get('/login', (req, res) => {
+    res.set("Content-Type", "text/html");
+    res.sendFile(path.resolve("../client/_site/users/html/login.html"));
+})
+
+router.get('/forgot_password', (req, res) => {
+    res.set("Content-Type", "text/html");
+    res.sendFile(path.resolve("../client/_site/users/html/forgot_password.html"));
+})
+
+
+// =================================================================
+
+
 
 module.exports = router

@@ -8,7 +8,7 @@ const jwtExpirySeconds = 300
 
 function auth(req, res, next) {
     // We can obtain the session token from the requests cookies, which come with every request
-    const token = req.cookies.token
+    const token = req.cookies.user_token
 
     // if the cookie is not set, return an unauthorized error
     if (!token) {
