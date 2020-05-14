@@ -4,6 +4,7 @@ const details = document.getElementById("details")
 const review_views = document.getElementById("review_details")
 const save = document.getElementById("save")
 const review = document.getElementById("review")
+const check = document.getElementById("check");
 const book_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
 const BASE_URL = "http://localhost:5000";
 
@@ -38,24 +39,46 @@ function showBook(book_detail) {
                           <h4 class="card-title">${book_detail.title}</h4>
                            <a href="#" class="btn " style="color: blue; ">by BookAuthor: ${book_detail.author.first_name}</a><br>
                            <a href="#" class="btn " style="color: blue;">Category Name: ${book_detail.category} </a></div>`
-  for (i = 0; i < book_detail.reviews.length ; i++) {                        
-  review_views.innerHTML += `<p>${book_detail.reviews[i].user.first_name}`+":"+`${book_detail.reviews[i].review}</p>`                       
-  
-  console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
-  // review.innerHTML = `<p>${book_detail.title}</p>`
+  showRate()
+  for (i = 0; i < book_detail.reviews.length; i++) {
+    review_views.innerHTML += `<p>${book_detail.reviews[i].user.first_name}` + ":" + `${book_detail.reviews[i].review}</p>`
+
+    console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+    // review.innerHTML = `<p>${book_detail.title}</p>`
   }
 
 }
 
+function showRate() {
+  axios
+    .get(BASE_URL + `/books/avg/${book_id}`)
+    .then(function (response) {
+      console.log("response: " + JSON.stringify(response));
+      let book_rate = response.data;
+      console.log("book:", book_rate);
+   
+  let div = ""
+  let count = book_rate
+  for (i = 0; i < 5; i++) {
+    if (i < count) {
+      div += `<div class="fa fa-star checked"></div>`
+    }
+    else {
+      div += `<div class="fa fa-star"></div>`
+    }
+    check.innerHTML = div
+  }
+})
+}
 
 function save_review() {
   axios
-    .post(BASE_URL + `/reviews`,{r:review.value,b:book_id,u:"5eb9f701f223ca27acaec0ec"})
+    .post(BASE_URL + `/reviews`, { r: review.value, b: book_id, u: "5eb9f701f223ca27acaec0ec" })
     .then(function (response) {
       console.log("response: " + JSON.stringify(response));
       let review_detail = response.data;
       console.log("review_detail:", review_detail);
-      review.value=""
+      review.value = ""
     })
     .catch(function (error) {
       if (error.response) {

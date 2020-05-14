@@ -7,3 +7,6 @@
  float: right;
  background-color: darkblue;
 }
+.checked {
+    color: orange;
+  }
