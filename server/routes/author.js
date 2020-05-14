@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 
 const authorModel = require("../models/Author");
+const booksModel = require("../models/Book");
 const upload = multer({ dest: "tmp/" });
 
 const { promisify } = require("util");
@@ -89,6 +90,14 @@ router.patch("/data/:id", async (request, response) => {
 
 router.delete("/data/:id", async (request, response) => {
   try {
+    const deletedBooks = await booksModel
+      .find({ author: request.params.id })
+      .deleteMany();
+
+    if (!deletedBooks) {
+      console.log(deletedBooks);
+    }
+
     const deleted_author = await authorModel.findByIdAndDelete(
       request.params.id
     );
