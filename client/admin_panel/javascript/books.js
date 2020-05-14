@@ -9,7 +9,6 @@ function onRefreshBooksBtnClicked(e) {
 }
 
 function onAddBookBtnClicked(e) {
-  console.log("id", this.id);
   let html = "";
   html += `<div class="form-group">
           <input type="text" class="form-control" name="title", id="title" placeholder="Book Title">
@@ -38,10 +37,7 @@ function onAddBookBtnClicked(e) {
   axios
     .get(BASE_URL + "/categories/data")
     .then(function (response) {
-      console.log("response:", response);
       let select = document.getElementById("categoriesSelection");
-      console.log("select", select);
-
       for (i = 0; i < response.data.length; i++) {
         var opt = document.createElement("option");
         opt.id = response.data[i]._id;
@@ -56,9 +52,7 @@ function onAddBookBtnClicked(e) {
   axios
     .get(BASE_URL + "/authors/data")
     .then(function (response) {
-      console.log("response:", response);
       let select = document.getElementById("authorsSelection");
-      console.log("select", select);
 
       for (i = 0; i < response.data.length; i++) {
         var opt = document.createElement("option");
@@ -74,18 +68,14 @@ function onAddBookBtnClicked(e) {
 
   openCreateForm();
 
-  console.log($(".nav-tabs .active").id);
 }
 
 function onBookDeleteBtnClicked(e) {
-  console.log("this.id: ", this.id);
 
   let book_id = this.id.replace("btn_delete_", "");
-  console.log("book_id: ", book_id);
   axios
     .delete(BASE_URL + "/books/data/" + book_id)
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       if (response.status == 200) {
         getAllBooks();
       }
@@ -124,9 +114,7 @@ function getAllBooks() {
   axios
     .get(BASE_URL + "/books/data")
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let books = response.data;
-      console.log("books:", books);
       showBooks(books);
     })
     .catch(function (error) {
@@ -146,9 +134,6 @@ function onCreateNewBook() {
   let selectedAuthor =
     authorsSelect.options[authorsSelect.options.selectedIndex].id;
   let bookImage = document.getElementById("image").files[0];
-
-  console.log(":selectedCategory: ", selectedCategory);
-  console.log("selectedAuthor: ", selectedAuthor);
 
   if (!bookTitle) {
     alert("please select book title");
@@ -183,7 +168,6 @@ function onCreateNewBook() {
       },
     })
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       getAllBooks();
     })
     .catch(function (error) {

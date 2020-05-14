@@ -16,16 +16,12 @@ function openCreateForm() {
 }
 
 function closeCreateForm() {
-  console.log("closeCreateForm called");
-
   document.getElementById("light").style.display = "none";
   document.getElementById("fade").style.display = "none";
 }
 
 function onCreateFormSubmit(e) {
   e.preventDefault();
-
-  console.log("selectedTab: ", selectedTab);
 
   switch (selectedTab) {
     case 0:
@@ -54,14 +50,10 @@ function onLogoutBtnClicked(e) {
 // --------------------------------------------------------------------
 
 function showAdminData() {
-  console.log("getting admin data");
-
   axios
     .get(BASE_URL + "/admin/data")
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let data = response.data;
-      console.log("admin-data:", data);
       adminEmailLabel.textContent = data;
     })
     .catch(function (error) {

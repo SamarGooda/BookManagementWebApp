@@ -20,7 +20,6 @@ function onRefreshAuthorsBtnClicked(e) {
 }
 
 function onAddAuthorBtnClicked(e) {
-  console.log("id", this.id);
   let html = "";
   html += `<div class="form-group">
           <input type="text" class="form-control" name="f", id="fname" placeholder="First Name">
@@ -46,19 +45,13 @@ function onAddAuthorBtnClicked(e) {
   });
 
   openCreateForm();
-
-  console.log($(".nav-tabs .active").id);
 }
 
 function onAuthorDeleteBtnClicked(e) {
-  console.log("this.id: ", this.id);
-
   let author_id = this.id.replace("btn_delete_", "");
-  console.log("author_id: ", author_id);
   axios
     .delete(BASE_URL + "/authors/data/" + author_id)
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       if (response.status == 200) {
         getAllAuthors();
       }
@@ -74,9 +67,7 @@ function getAllAuthors() {
   axios
     .get(BASE_URL + "/authors/data")
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let authors = response.data;
-      console.log("authors:", authors);
       showAuthors(authors);
     })
     .catch(function (error) {
@@ -122,7 +113,6 @@ function onCreateNewAuthor() {
       },
     })
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       getAllAuthors();
     })
     .catch(function (error) {

@@ -13,7 +13,6 @@ function onCreateNewCategory() {
   axios
     .post(BASE_URL + "/categories/data", { n: bookName })
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       getAllCategories();
     })
     .catch(function (error) {
@@ -30,9 +29,7 @@ function getAllCategories() {
   axios
     .get(BASE_URL + "/categories/data")
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let categories = response.data;
-      console.log("categories:", categories);
       showCategories(categories);
     })
     .catch(function (error) {
@@ -44,8 +41,6 @@ function showCategories(categories) {
   let html = "";
 
   for (i = 0; i < categories.length; i++) {
-    console.log(`categories [${i}]`, categories[i]);
-
     html += `<tr>
     <th scope="row">${i + 1}</th>
     <td>${categories[i].name}</td>
@@ -68,7 +63,6 @@ function onRefreshCategoriesBtnClicked(e) {
 }
 
 function onAddCategoryBtnClicked(e) {
-  console.log("id", this.id);
   let html = "";
   html += `<div class="form-group">
           <label for="cname">Category Name</label>
@@ -76,18 +70,13 @@ function onAddCategoryBtnClicked(e) {
           </div>`;
   document.getElementById("form_inputs").innerHTML = html;
   openCreateForm();
-  console.log($(".nav-tabs .active").id);
 }
 
 function onCategoryDeleteBtnClicked(e) {
-  console.log("this.id: ", this.id);
-
   let category_id = this.id.replace("btn_delete_", "");
-  console.log("category_id: ", category_id);
   axios
     .delete(BASE_URL + "/categories/data/" + category_id)
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       if (response.status == 200) {
         getAllCategories();
       }
