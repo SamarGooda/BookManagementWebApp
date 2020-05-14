@@ -9,7 +9,7 @@ const usersModel = require("../models/User");
 
 router.get("/", async (request, response) => {
   try {
-    const reviews = await reviewsModel.find({});
+    const reviews = await reviewsModel.find({}).populate('user')
     response.json(reviews);
   } catch (error) {
     console.log(error);
@@ -19,7 +19,7 @@ router.get("/", async (request, response) => {
 
 router.get("/:id", async (request, response) => {
   try {
-    const review = await reviewsModel.findById(request.params.id);
+    const review = await reviewsModel.findById(request.params.id).populate('user')
     response.json(review);
   } catch (error) {
     console.log(error);
