@@ -6,6 +6,8 @@ const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+const homepageRouter = require("./routes/homepage.js")
+const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 const authorRouter = require("./routes/author");
 const bookRouter = require("./routes/books");
@@ -43,6 +45,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use("/", homepageRouter);
+app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/books", bookRouter);
 app.use("/authors", authorRouter);
