@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-var multer = require("multer");
+const multer = require("multer");
 
 const authorModel = require("../models/Author");
-const upload = multer({ dest: "../tmp" });
+const upload = multer({ dest: "tmp/" });
 
 const { promisify } = require("util");
 const fs = require("fs");
@@ -12,7 +12,7 @@ const rm = promisify(fs.unlink);
 
 // ==========================================================================
 
-router.get("/", async (request, response) => {
+router.get("/data", async (request, response) => {
   try {
     const authors = await authorModel
       .find({})
@@ -24,7 +24,7 @@ router.get("/", async (request, response) => {
   }
 });
 
-router.get("/:id", async (request, response) => {
+router.get("/data/:id", async (request, response) => {
   try {
     const author = await authorModel.findById(request.params.id);
     response.json(author);
@@ -36,8 +36,8 @@ router.get("/:id", async (request, response) => {
 
 // ==========================================================================
 
-router.post("/", upload.single("image"), async (request, response) => {
-  const { f, l, dob, i } = request.body;
+router.post("/data", upload.single("image"), async (request, response) => {
+  const { f, l, dob } = request.body;
   console.log("request.body: ", request.body);
   console.log("request.file: ", request.file);
 
@@ -51,7 +51,7 @@ router.post("/", upload.single("image"), async (request, response) => {
   try {
     const saved_author = await new_author.save();
     await mv(
-      __dirname + "/../../" + "tmp/" + request.file.filename,
+      __dirname + "/../" + "tmp/" + request.file.filename,
       __dirname + "/../" + "public/authors/" + request.file.filename + ".png"
     );
     response.json(saved_author);
@@ -63,7 +63,7 @@ router.post("/", upload.single("image"), async (request, response) => {
 
 // ==========================================================================
 
-router.patch("/:id", async (request, response) => {
+router.patch("/data/:id", async (request, response) => {
   const { f, l, dob, i } = request.body;
 
   try {
@@ -87,7 +87,7 @@ router.patch("/:id", async (request, response) => {
 
 // ==========================================================================
 
-router.delete("/:id", async (request, response) => {
+router.delete("/data/:id", async (request, response) => {
   try {
     const deleted_author = await authorModel.findByIdAndDelete(
       request.params.id

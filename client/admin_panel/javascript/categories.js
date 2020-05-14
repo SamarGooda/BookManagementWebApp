@@ -5,6 +5,10 @@ const categoriesTable = document.getElementById("categoriesTable");
 
 function onCreateNewCategory() {
   let bookName = document.getElementById("cname").value;
+  if (!bookName) {
+    alert("Could not create Category!");
+    return;
+  }
 
   axios
     .post(BASE_URL + "/categories/data", { n: bookName })

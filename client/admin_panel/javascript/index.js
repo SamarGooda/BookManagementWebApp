@@ -10,11 +10,6 @@ const BASE_URL = "http://localhost:5000";
 
 // --------------------------------------------------------------------
 
-function onCreateNewBook() {}
-
-
-// --------------------------------------------------------------------
-
 function openCreateForm() {
   document.getElementById("light").style.display = "block";
   document.getElementById("fade").style.display = "block";

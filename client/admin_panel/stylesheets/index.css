@@ -61,7 +61,7 @@
   top: 15%;
   left: 25%;
   width: 50%;
-  height: 75%;
+  height: 60%;
   padding: 16px;
   /* border: 16px solid orange; */
   background-color: white;
@@ -77,4 +77,12 @@
 #x {
   top: 10px;
   right: 10px;
+}
+
+.custom-select{
+  margin-bottom: 10px;
+}
+
+.custom-file{
+  margin-bottom: 10px;
 }

@@ -1,87 +1,101 @@
 const express = require("express");
+const path = require("path");
+const Book = require("../models/Book");
+const Rate = require("../models/book_rate");
+const multer = require("multer");
+
+const upload = multer({ dest: "tmp/" });
+const { promisify } = require("util");
+const fs = require("fs");
+const mv = promisify(fs.rename);
+const rm = promisify(fs.unlink);
+
 const router = express.Router();
-var path = require("path");
-const Book = require('../models/Book')
-const Rate = require('../models/book_rate')
 
-router.post('/', async (req, res, next) => {
-  //  const { id } = req.params
-  // res.send("creating user with id = 5")
-  const { title, image, author, category } = req.body
-  const books = new Book({ title, image, author, category })
+router.post("/data", upload.single("image"), async (request, response) => {
+  const { title, author, category } = request.body;
+  console.log("request.body: ", request.body);
+  console.log("request.file: ", request.file);
+
+  const new_book = new Book({
+    title: title,
+    author: author,
+    category: category,
+    image: "/images/books/" + request.file.filename,
+  });
+
   try {
-    const book_data = await books.save()
-    return res.json(book_data)
-  } catch (err) {
-    next(err)
+    const saved_book = await new_book.save();
+    await mv(
+      __dirname + "/../" + "tmp/" + request.file.filename,
+      __dirname + "/../" + "public/books/" + request.file.filename + ".png"
+    );
+    response.json(saved_book);
+  } catch (error) {
+    console.log(error);
+    response.status(400).send();
   }
-})
+});
 
-router.get('/data', async (req, res, next) => {
+router.get("/data", async (req, res, next) => {
   try {
-    const books = await Book.find({}).populate('author').populate({
-      path: 'reviews',
-      populate: {
-        path: 'user'
-      }
-    })
+    const books = await Book.find({})
+      .populate("author")
+      .populate("category")
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "user",
+        },
+      });
     // .populate('category')
 
-
-    return res.json(books)
+    return res.json(books);
   } catch (err) {
-    next(err)
+    next(err);
   }
-})
+});
 
-
-router.get('/data/:id', async (req, res, next) => {
+router.get("/data/:id", async (req, res, next) => {
   try {
-
-    const book_data = await Book.findById(req.params.id).populate('author').populate({
-      path: 'reviews',
-      populate: {
-        path: 'user'
-      }
-    })
-
+    const book_data = await Book.findById(req.params.id)
+      .populate("author")
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "user",
+        },
+      });
 
     // populate('category');
 
     if (book_data) {
-      return res.json(book_data)
-    }
-    else {
+      return res.json(book_data);
+    } else {
       return res.status(404).send();
     }
-
-
   } catch (err) {
-    console.log("errrrrr:", err)
-    next(err)
+    console.log("errrrrr:", err);
+    next(err);
   }
-
-})
+});
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // rate for book
 router.get("/avg/:id", async (request, response) => {
-
   try {
-    const book_data = await Book.findById(request.params.id)
-    if(! book_data){
+    const book_data = await Book.findById(request.params.id);
+    if (!book_data) {
       return response.status(404).send();
     }
     const query = { book: request.params.id };
-    const book_rates = await Rate.find(query)
-    let sum = 0
-    for (i=0; i< book_rates.length ; i++)
-    {
-      
-      sum += book_rates[i].rate 
+    const book_rates = await Rate.find(query);
+    let sum = 0;
+    for (i = 0; i < book_rates.length; i++) {
+      sum += book_rates[i].rate;
     }
-    const avg_rate =  sum / book_rates.length
-    console.log(book_rates)
+    const avg_rate = sum / book_rates.length;
+    console.log(book_rates);
     response.json(avg_rate);
   } catch (error) {
     console.log(error);
@@ -89,32 +103,22 @@ router.get("/avg/:id", async (request, response) => {
   }
 });
 /////////////////////////////////////////////////////////////////////////////////////////////
-router.delete('/data/:id', async (req, res, next) => {
+
+router.delete("/data/:id", async (request, response) => {
   try {
-    const book_data = await Book.findByIdAndRemove({})
-    // const book_data = await Book.findByIdAndDelete(
-    //   request.params.id
-    // );
-    return res.json(book_data)
+    const deleted_book = await Book.findByIdAndDelete(request.params.id);
 
-  } catch (err) {
-    next(err)
+    let imgFileName = deleted_book.image.split("/")[3];
+    console.log("imgFileName: ", imgFileName);
+
+    await rm(__dirname + "/../" + "public/books/" + imgFileName + ".png");
+
+    response.json(deleted_book);
+  } catch (error) {
+    console.log(error);
+    response.status(400).send();
   }
-})
-
-// router.delete('/data', async(req, res, next) => {
-//   try {
-//       const book_data = await Book.findAndRemove(req.params.id)
-//       // const book_data = await Book.findByIdAndDelete(
-//       //   request.params.id
-//       // );
-//       return res.json(book_data)
-
-//   } catch (err) {
-//       next(err)
-//   }
-// })
-
+});
 
 router.patch("/data/:id", async (req, res, next) => {
   const { title, image, author, category } = req.body;
