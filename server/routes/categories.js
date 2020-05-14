@@ -67,6 +67,11 @@ router.patch("/data/:id", async (req, res) => {
 
 router.delete("/data/:id", async (req, res) => {
   try {
+    const deletedBooks = await booksModel
+    .find({ category: request.params.id })
+    .deleteMany();
+
+
     const deleted_category = await categoriesModel.findByIdAndDelete(
       req.params.id
     );
