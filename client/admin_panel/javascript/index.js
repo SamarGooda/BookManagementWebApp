@@ -10,12 +10,6 @@ const BASE_URL = "http://localhost:5000";
 
 // --------------------------------------------------------------------
 
-function onCreateNewBook() {}
-
-function onCreateNewCategory() {}
-
-// --------------------------------------------------------------------
-
 function openCreateForm() {
   document.getElementById("light").style.display = "block";
   document.getElementById("fade").style.display = "block";
@@ -28,10 +22,6 @@ function closeCreateForm() {
 
 function onCreateFormSubmit(e) {
   e.preventDefault();
-
-  closeCreateForm();
-
-  console.log("selectedTab: ", selectedTab);
 
   switch (selectedTab) {
     case 0:
@@ -60,28 +50,16 @@ function onLogoutBtnClicked(e) {
 // --------------------------------------------------------------------
 
 function showAdminData() {
-  console.log("getting admin data");
-
   axios
     .get(BASE_URL + "/admin/data")
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let data = response.data;
-      console.log("admin-data:", data);
       adminEmailLabel.textContent = data;
     })
     .catch(function (error) {
       console.log("error:", error);
     });
 }
-
-// --------------------------------------------------------------------
-
-function showCategories() {}
-
-// --------------------------------------------------------------------
-
-function getAllCategories() {}
 
 // --------------------------------------------------------------------
 $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {

@@ -1,0 +1,41 @@
+const express = require('express');
+const helpers = require('../helpers/general_helpers');
+const auth_helper = require('../helpers/auth_helper');
+const jwt = require('jsonwebtoken')
+const jwtKey = 'very_hard_secret_key'
+const jwtExpirySeconds = 300
+
+
+function auth(req, res, next) {
+    // We can obtain the session token from the requests cookies, which come with every request
+    const token = req.cookies.user_token
+
+    // if the cookie is not set, return an unauthorized error
+    if (!token) {
+        return res.json({ status: 0, message: "user not signed in" });
+    }
+
+    var payload
+    try {
+        // Parse the JWT string and store the result in `payload`.
+        // Note that we are passing the key in this method as well. This method will throw an error
+        // if the token is invalid (if it has expired according to the expiry time we set on sign in),
+        // or if the signature does not match
+        payload = jwt.verify(token, jwtKey)
+    } catch (e) {
+        if (e instanceof jwt.JsonWebTokenError) {
+            // if the error thrown is because the JWT is unauthorized, return a 401 error
+            return 
+        }
+        // otherwise, return a bad request error
+        return helpers.handleError(res)
+    }
+
+    // Finally, return the welcome message to the user, along with their
+    // username given in the token
+    req.userData=payload;
+    next()
+}
+
+
+module.exports = auth

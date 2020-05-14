@@ -19,13 +19,11 @@ function onLoginBtnClick(e) {
   axios
     .post(BASE_URL + "/admin/login", { email, password })
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       if (response.status == 201) {
         window.location.replace("/admin");
       }
     })
     .catch(function (error) {
-      console.log("error.response.status:", error.response.status);
       if (error.response.status == 401) {
         passwordInput.value = "";
         alert("Invalid credentials!");

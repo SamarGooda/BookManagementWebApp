@@ -9,41 +9,73 @@ function onRefreshBooksBtnClicked(e) {
 }
 
 function onAddBookBtnClicked(e) {
-  console.log("id", this.id);
   let html = "";
   html += `<div class="form-group">
-          <label for="fname">First Name</label>
-          <input type="text" class="form-control" name="f", id="fname" placeholder="John">
+          <input type="text" class="form-control" name="title", id="title" placeholder="Book Title">
           </div>`;
-  html += `<div class="form-group">
-          <label for="lname">Last Name</label>
-          <input type="text" class="form-control" name="l", id="lname" placeholder="Smith">
-          </div>`;
-  html += `<div class="form-group">
-          <label for="dob">Date of birth</label>
-          <input type="text" class="form-control" name="dob", id="dob" placeholder="1990-01-01">
-          </div>`;
-  html += `<div class="form-group">
-          <label for="i">Select image</label>
-          <input type="file" accept="image/*" class="form-control" name="image", id="i">
+
+  html += `<select class="custom-select" id="categoriesSelection">
+          <option id="defCategory" selected>Select Category</option>
+          </select><br/>`;
+
+  html += `<select class="custom-select" id="authorsSelection">
+          <option selected id="defAuthor">Select Author</option>
+          </select>`;
+
+  html += `<div class="custom-file" style="margin-top: 10px;">
+          <input type="file" class="custom-file-input" accept="image/*" name="image", id="image">
+          <label class="custom-file-label" for="image">Choose file</label>
           </div>`;
 
   document.getElementById("form_inputs").innerHTML = html;
 
+  $(".custom-file-input").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+
+  axios
+    .get(BASE_URL + "/categories/data")
+    .then(function (response) {
+      let select = document.getElementById("categoriesSelection");
+      for (i = 0; i < response.data.length; i++) {
+        var opt = document.createElement("option");
+        opt.id = response.data[i]._id;
+        opt.innerHTML = response.data[i].name;
+        select.appendChild(opt);
+      }
+    })
+    .catch(function (error) {
+      console.log("error:", error);
+    });
+
+  axios
+    .get(BASE_URL + "/authors/data")
+    .then(function (response) {
+      let select = document.getElementById("authorsSelection");
+
+      for (i = 0; i < response.data.length; i++) {
+        var opt = document.createElement("option");
+        opt.id = response.data[i]._id;
+        opt.innerHTML =
+          response.data[i].first_name + " " + response.data[i].last_name;
+        select.appendChild(opt);
+      }
+    })
+    .catch(function (error) {
+      console.log("error:", error);
+    });
+
   openCreateForm();
 
-  console.log($(".nav-tabs .active").id);
 }
 
 function onBookDeleteBtnClicked(e) {
-  console.log("this.id: ", this.id);
 
   let book_id = this.id.replace("btn_delete_", "");
-  console.log("book_id: ", book_id);
   axios
     .delete(BASE_URL + "/books/data/" + book_id)
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       if (response.status == 200) {
         getAllBooks();
       }
@@ -53,6 +85,8 @@ function onBookDeleteBtnClicked(e) {
     });
 }
 
+// --------------------------------------------------------------------
+
 function showBooks(books) {
   let html = "";
   for (i = 0; i < books.length; i++) {
@@ -60,7 +94,7 @@ function showBooks(books) {
     <th scope="row">${i + 1}</th>
     <td>${books[i].title}</td>
     <td>${books[i].author.first_name + " " + books[i].author.last_name}</td>
-    <td>${books[i].category}</td>
+    <td>${books[i].category.name}</td>
     <td><a href="${books[i].image}" target="_blank">show image</a></td>
     <td><button class="btn btn-danger" id="btn_delete_${
       books[i]._id
@@ -80,14 +114,70 @@ function getAllBooks() {
   axios
     .get(BASE_URL + "/books/data")
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let books = response.data;
-      console.log("books:", books);
       showBooks(books);
     })
     .catch(function (error) {
       console.log("error:", error);
     });
+}
+
+// --------------------------------------------------------------------
+
+function onCreateNewBook() {
+  let categorySelect = document.getElementById("categoriesSelection");
+  let authorsSelect = document.getElementById("authorsSelection");
+
+  let bookTitle = document.getElementById("title").value;
+  let selectedCategory =
+    categorySelect.options[categorySelect.options.selectedIndex].id;
+  let selectedAuthor =
+    authorsSelect.options[authorsSelect.options.selectedIndex].id;
+  let bookImage = document.getElementById("image").files[0];
+
+  if (!bookTitle) {
+    alert("please select book title");
+    return;
+  }
+
+  if (selectedCategory === "defCategory") {
+    alert("please select book Category");
+    return;
+  }
+
+  if (selectedAuthor === "defAuthor") {
+    alert("please select book Author");
+    return;
+  }
+
+  if (!bookImage) {
+    alert("Please select book image!");
+    return;
+  }
+
+  var formData = new FormData();
+  formData.append("image", bookImage);
+  formData.append("title", bookTitle);
+  formData.append("author", selectedAuthor);
+  formData.append("category", selectedCategory);
+
+  axios
+    .post(BASE_URL + "/books/data", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then(function (response) {
+      getAllBooks();
+    })
+    .catch(function (error) {
+      console.log("error:", error);
+      alert("Could not create Book!");
+    });
+
+  document.getElementById("form_inputs").innerHTML = "";
+
+  closeCreateForm();
 }
 
 addBookBtn.addEventListener("click", onAddBookBtnClicked);
