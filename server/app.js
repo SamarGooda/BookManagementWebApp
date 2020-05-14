@@ -50,7 +50,7 @@ app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/books", bookRouter);
 app.use("/authors", authorRouter);
-app.use("/category", categoryRouter);
+app.use("/categories", categoryRouter);
 app.use("/admin", adminRouter);
 app.use("/errors", errorsRouter);
 app.use("/reviews", reviewsRouter);

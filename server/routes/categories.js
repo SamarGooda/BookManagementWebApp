@@ -1,26 +1,81 @@
-const express = require('express')
-const router = express.Router()
-const CategoryModel = require('../models/Category');
+const express = require("express");
+const router = express.Router();
+const categoriesModel = require("../models/Category");
 
-router.get('/data',async (req, res) => {
-    res.send('listing all categories.')
+router.get("/data", async (req, res) => {
+  try {
+    const allCategories = await categoriesModel.find({});
+    res.json(allCategories);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
+  }
 });
 
-router.post('/data', async (req, res) => {
-    res.send('creating new category.');
+router.post("/data", async (req, res) => {
+  console.log("req.body: ", req.body);
+  const { n } = req.body;
+  try {
+    if (!n) {
+      return res.status(400).send();
+    }
+
+    const new_category = new categoriesModel({
+      name: n,
+    });
+
+    const saved_category = await new_category.save();
+    if (saved_category) res.json(saved_category);
+    else res.status(400).send();
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
+  }
 });
 
-router.get('/data/:id',async (req, res) => {
-    res.send(`listing category of id = ${req.params.id}`);
+router.get("/data/:id", async (req, res) => {
+  try {
+    const category = await categoriesModel.findById(req.params.id);
+    if (category) res.json(category);
+    else res.status(400).send();
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
+  }
 });
 
-router.patch('/data/:id', async (req, res) => {
-    res.send(`Editing category of id = ${req.params.id}`);
-})
+router.patch("/data/:id", async (req, res) => {
+  console.log("req.body: ", req.body);
 
-router.delete('/data/:id', async(req, res) => {
-    res.send(`Deleting category of id = ${req.params.id}`);
+  const { n } = req.body;
+
+  try {
+    const category = await categoriesModel.findById(req.params.id);
+    if (category) {
+      if (n) category.name = n;
+      const saved_category = await category.save();
+      if (saved_category) res.json(saved_category);
+      else res.status(400).send();
+    } else {
+      res.status(400).send();
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
+  }
 });
 
+router.delete("/data/:id", async (req, res) => {
+  try {
+    const deleted_category = await categoriesModel.findByIdAndDelete(
+      req.params.id
+    );
+    if (deleted_category) res.json(deleted_category);
+    else res.status(400).send();
+  } catch (error) {
+    console.log(error);
+    res.status(400).send();
+  }
+});
 
-module.exports = router
+module.exports = router;

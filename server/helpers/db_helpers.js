@@ -57,6 +57,7 @@ const categoryValidation = {
 const categoryNameValidation = {
   type: String,
   required: true,
+  unique: true,
 };
 
 const reviewTextValidation = {
@@ -79,7 +80,7 @@ const bookValidation = {
 const shelveTypeValidation = {
   type: String,
   enum: ["none", "read", "current", "want"],
-  default: 'none',
+  default: "none",
   required: true,
 };
 
