@@ -76,14 +76,6 @@ function showAdminData() {
 }
 
 // --------------------------------------------------------------------
-
-function showCategories() {}
-
-// --------------------------------------------------------------------
-
-function getAllCategories() {}
-
-// --------------------------------------------------------------------
 $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
   switch (e.currentTarget.id) {
     case "books-tab":

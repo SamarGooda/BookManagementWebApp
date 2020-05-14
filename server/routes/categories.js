@@ -4,7 +4,7 @@ const categoriesModel = require("../models/Category");
 
 router.get("/data", async (req, res) => {
   try {
-    const allCategories = await categoriesModel.find({});
+    const allCategories = await categoriesModel.find({}).sort({ name: 1 });
     res.json(allCategories);
   } catch (error) {
     console.log(error);
