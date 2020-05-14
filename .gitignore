@@ -107,3 +107,5 @@ dist
 _site
 .jekyll-cache/
 tmp/
+
+server/public
