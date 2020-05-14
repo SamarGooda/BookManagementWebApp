@@ -153,6 +153,7 @@ router.get("/stylecheets/books.css", function (req, res) {
 });
 
 router.get("/", function (req, res) {
+  
   res.set("Content-Type", "text/html");
   res.sendFile(path.resolve("../client/_site/html/books/books.html"));
 });
