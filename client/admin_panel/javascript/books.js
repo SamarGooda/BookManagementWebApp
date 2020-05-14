@@ -191,10 +191,9 @@ function onCreateNewBook() {
       alert("Could not create Book!");
     });
 
-  document.getElementById("fname").value = "";
-  document.getElementById("lname").value = "";
-  document.getElementById("dob").value = "";
-  document.getElementById("i").value = "";
+  document.getElementById("form_inputs").innerHTML = "";
+
+  closeCreateForm();
 }
 
 addBookBtn.addEventListener("click", onAddBookBtnClicked);

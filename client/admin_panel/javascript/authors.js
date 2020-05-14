@@ -56,7 +56,7 @@ function onAuthorDeleteBtnClicked(e) {
   let author_id = this.id.replace("btn_delete_", "");
   console.log("author_id: ", author_id);
   axios
-    .delete(BASE_URL + "/authors/data" + author_id)
+    .delete(BASE_URL + "/authors/data/" + author_id)
     .then(function (response) {
       console.log("response: " + JSON.stringify(response));
       if (response.status == 200) {
@@ -130,10 +130,9 @@ function onCreateNewAuthor() {
       alert("Could not create Author!");
     });
 
-  document.getElementById("fname").value = "";
-  document.getElementById("lname").value = "";
-  document.getElementById("dob").value = "";
-  document.getElementById("i").value = "";
+  document.getElementById("form_inputs").innerHTML = "";
+
+  closeCreateForm();
 }
 
 // --------------------------------------------------------------------

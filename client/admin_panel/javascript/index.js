@@ -16,14 +16,14 @@ function openCreateForm() {
 }
 
 function closeCreateForm() {
+  console.log("closeCreateForm called");
+
   document.getElementById("light").style.display = "none";
   document.getElementById("fade").style.display = "none";
 }
 
 function onCreateFormSubmit(e) {
   e.preventDefault();
-
-  closeCreateForm();
 
   console.log("selectedTab: ", selectedTab);
 

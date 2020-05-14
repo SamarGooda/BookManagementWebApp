@@ -21,7 +21,9 @@ function onCreateNewCategory() {
       alert("Could not create Category!");
     });
 
-  document.getElementById("cname").value = "";
+  document.getElementById("form_inputs").innerHTML = "";
+
+  closeCreateForm();
 }
 
 function getAllCategories() {
