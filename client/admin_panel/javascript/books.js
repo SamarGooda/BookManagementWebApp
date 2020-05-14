@@ -12,21 +12,22 @@ function onAddBookBtnClicked(e) {
   console.log("id", this.id);
   let html = "";
   html += `<div class="form-group">
-          <label for="fname">First Name</label>
-          <input type="text" class="form-control" name="f", id="fname" placeholder="John">
-          </div>`;
-  html += `<div class="form-group">
-          <label for="lname">Last Name</label>
-          <input type="text" class="form-control" name="l", id="lname" placeholder="Smith">
-          </div>`;
-  html += `<div class="form-group">
-          <label for="dob">Date of birth</label>
-          <input type="text" class="form-control" name="dob", id="dob" placeholder="1990-01-01">
+          <label for="title">Title</label>
+          <input type="text" class="form-control" name="title", id="title" placeholder="The great book">
           </div>`;
   html += `<div class="form-group">
           <label for="i">Select image</label>
-          <input type="file" accept="image/*" class="form-control" name="image", id="i">
+          <input type="file" accept="image/*" class="form-control" name="image", id="image">
           </div>`;
+
+  // <select id="cars" name="cars">
+  //   <option value="volvo">Volvo</option>
+  //   <option value="saab">Saab</option>
+  //   <option value="fiat">Fiat</option>
+  //   <option value="audi">Audi</option>
+  // </select>;
+  html += `<select id="cars" name="cars">
+</select>`;
 
   document.getElementById("form_inputs").innerHTML = html;
 

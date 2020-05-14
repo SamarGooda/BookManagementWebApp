@@ -3,8 +3,6 @@ const refreshAuthorsBtn = document.getElementById("refresh_authors_btn");
 
 const authorsTable = document.getElementById("authorstable");
 
-// const BASE_URL = "http://localhost:5000";
-
 // --------------------------------------------------------------------
 
 function getFormattedDate(dateStr) {
