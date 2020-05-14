@@ -56,9 +56,7 @@ async function sendAjaxRequest(url, method) {
 			remove_loading($(this));
 
 			if (options['useAJAX'] == true) {
-				// Dummy AJAX request (Replace this with your AJAX code)
-				// If you don't want to use AJAX, remove this
-				submit_form('http://localhost:5000/auth/login',$(this));
+				submit_form('http://localhost:5000/auth/login', $(this));
 
 				// Cancel the normal submission.
 				// If you don't want to use AJAX, remove this
@@ -198,32 +196,19 @@ async function sendAjaxRequest(url, method) {
 					},
 					body: JSON.stringify($('form').serializeObject())
 				})
-					.then((res) => console.log(res))
-					.then((data) => console.log(data))
-					.catch((error) => console.log(error))
-
-				setTimeout(function () {
-					form_success($form);
-				}, 2000);
+					.then((res) => {
+						if (res && res.status == 200)
+							form_success($form);
+						else form_failed($form);
+					})
+					.catch((error) => {					
+						form_failed($form);
+					})
 			}
 		}
 	})
 	$(document).on('submit', function (e) {
 		e.preventDefault();
-
-		// var form = $(this).parent().closest('form');
-		// var action = form.attr('action');
-		// var data = form.serialize();
-
-
-		// $.ajax({
-		// 	type: 'POST',
-		// 	url: action,
-		// 	data: data,
-		// 	success: function () {
-		// 		loadPrefs('resources');
-		// 	}
-		// });
 	});
 
 })(jQuery); 

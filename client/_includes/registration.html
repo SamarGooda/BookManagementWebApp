@@ -1,0 +1,59 @@
+---
+title: Registration
+layout: users_layout
+---
+
+<!-- REGISTRATION FORM -->
+<div class="text-center" style="padding:50px 0">
+	<div class="logo">Register</div>
+	<!-- Main Form -->
+	<div class="login-form-1">
+		<form action="/users/registration" method="POST" id="register-form" class="text-left" enctype="multipart/form-data">
+			<div class="login-form-main-message"></div>
+			<div class="main-login-form">
+				<div class="login-group">
+					<div class="form-group">
+						<label for="first_name" class="sr-only">First Name</label>
+						<input type="text" class="form-control" id="first_name" name="first_name"
+							placeholder="First Name">
+					</div>
+					<div class="form-group">
+						<label for="last_name" class="sr-only">Last Name</label>
+						<input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name">
+					</div>
+
+					<div class="form-group">
+						<label for="email" class="sr-only">Email</label>
+						<input type="email" class="form-control" id="email" name="email" placeholder="email">
+					</div>
+
+					<div class="form-group">
+						<label for="password" class="sr-only">Password</label>
+						<input type="password" class="form-control" id="password" name="password"
+							placeholder="password">
+					</div>
+					<div class="form-group">
+						<label for="password_confirm" class="sr-only">Password Confirm</label>
+						<input type="password" class="form-control" id="password_confirm" name="password_confirm"
+							placeholder="confirm password">
+					</div>
+
+					<!-- <div class="form-group">
+						<label for="image" class="sr-only">Profile Picture</label>
+						<input type="file" id="image" name="image" accept="image/x-png,image/jpeg" />
+					</div> -->
+
+					<div class="form-group login-group-checkbox">
+						<input type="checkbox" class="" id="agree" name="agree">
+						<label for="agree">I agree with <a href="#">terms</a></label>
+					</div>
+				</div>
+				<button type="submit" id="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+			</div>
+			<div class="etc-login-form">
+				<p>already have an account? <a href="/users/login">login here</a></p>
+			</div>
+		</form>
+	</div>
+	<!-- end:Main Form -->
+</div>

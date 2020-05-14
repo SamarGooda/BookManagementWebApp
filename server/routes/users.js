@@ -21,7 +21,7 @@ const helpers = require('../helpers/general_helpers');
 
 // get current logined user data
 router.get("/current_user", async function (req, res) {
-    const token = req.cookies.token;
+    const token = req.cookies.user_token;
     console.log("token is: ", token);
     let userId = helpers.getUserId(token);
     console.log("userId: " + userId);
