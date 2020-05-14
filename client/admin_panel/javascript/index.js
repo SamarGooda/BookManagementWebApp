@@ -12,7 +12,6 @@ const BASE_URL = "http://localhost:5000";
 
 function onCreateNewBook() {}
 
-function onCreateNewCategory() {}
 
 // --------------------------------------------------------------------
 

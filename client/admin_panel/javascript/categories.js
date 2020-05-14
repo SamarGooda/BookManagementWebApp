@@ -3,6 +3,23 @@ const refreshCategoriesBtn = document.getElementById("refresh_categories_btn");
 
 const categoriesTable = document.getElementById("categoriesTable");
 
+function onCreateNewCategory() {
+  let bookName = document.getElementById("cname").value;
+
+  axios
+    .post(BASE_URL + "/categories/data", { n: bookName })
+    .then(function (response) {
+      console.log("response: " + JSON.stringify(response));
+      getAllCategories();
+    })
+    .catch(function (error) {
+      console.log("error:", error);
+      alert("Could not create Category!");
+    });
+
+  document.getElementById("cname").value = "";
+}
+
 function getAllCategories() {
   axios
     .get(BASE_URL + "/categories/data")
@@ -33,7 +50,7 @@ function showCategories(categories) {
   }
   categoriesTable.innerHTML = html;
 
-  for (i = 0; i < authors.length; i++) {
+  for (i = 0; i < categories.length; i++) {
     document
       .getElementById(`btn_delete_${categories[i]._id}`)
       .addEventListener("click", onCategoryDeleteBtnClicked);
@@ -45,27 +62,15 @@ function onRefreshCategoriesBtnClicked(e) {
 }
 
 function onAddCategoryBtnClicked(e) {
-  // console.log("id", this.id);
-  // let html = "";
-  // html += `<div class="form-group">
-  //         <label for="fname">First Name</label>
-  //         <input type="text" class="form-control" name="f", id="fname" placeholder="John">
-  //         </div>`;
-  // html += `<div class="form-group">
-  //         <label for="lname">Last Name</label>
-  //         <input type="text" class="form-control" name="l", id="lname" placeholder="Smith">
-  //         </div>`;
-  // html += `<div class="form-group">
-  //         <label for="dob">Date of birth</label>
-  //         <input type="text" class="form-control" name="dob", id="dob" placeholder="1990-01-01">
-  //         </div>`;
-  // html += `<div class="form-group">
-  //         <label for="i">Select image</label>
-  //         <input type="file" accept="image/*" class="form-control" name="image", id="i">
-  //         </div>`;
-  // document.getElementById("form_inputs").innerHTML = html;
-  // openCreateForm();
-  // console.log($(".nav-tabs .active").id);
+  console.log("id", this.id);
+  let html = "";
+  html += `<div class="form-group">
+          <label for="cname">Category Name</label>
+          <input type="text" class="form-control" name="n", id="cname" placeholder="Science fiction">
+          </div>`;
+  document.getElementById("form_inputs").innerHTML = html;
+  openCreateForm();
+  console.log($(".nav-tabs .active").id);
 }
 
 function onCategoryDeleteBtnClicked(e) {
@@ -74,7 +79,7 @@ function onCategoryDeleteBtnClicked(e) {
   let category_id = this.id.replace("btn_delete_", "");
   console.log("category_id: ", category_id);
   axios
-    .delete(BASE_URL + "/categories/data" + category_id)
+    .delete(BASE_URL + "/categories/data/" + category_id)
     .then(function (response) {
       console.log("response: " + JSON.stringify(response));
       if (response.status == 200) {
