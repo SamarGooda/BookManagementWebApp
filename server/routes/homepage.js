@@ -3,13 +3,14 @@ const router = express.Router();
 const path = require("path");
 
 const auth = require("../middlewares/auth");
+const { calcAvgBookRate, getBookRates } = require("./books")
 
 router.get("/", (req, res) => {
-  res.set("Content-Type", "text/html");
-  const token = req.cookies.user_token;
-  if (token)
-    res.sendFile(path.resolve("../client/_site/homepage/html/user_index.html"));
-  else res.sendFile(path.resolve("../client/_site/homepage/html/index.html"));
+    res.set("Content-Type", "text/html");
+    const token = req.cookies.user_token;
+    if (token)
+        res.sendFile(path.resolve("../client/_site/homepage/html/user_index.html"));
+    else res.sendFile(path.resolve("../client/_site/homepage/html/index.html"));
 });
 
 const ShelfModel = require('../models/shelves');
@@ -32,20 +33,22 @@ router.get('/data/table', auth, async (req, res) => {
                 path: 'author'
             }
         });
-        res.set("Content-Type", "application/json");
+
         var newShelves = [];
         Object.keys(shelves).forEach((i, element) => {
+            book_rates = await getBookRates(shelves[i].book);
             let obj = {
-                cover: "i",
+                cover: `<a href="${shelves[i].book.image}">Cover</a>`,
                 name: shelves[i].book.title,
                 author: shelves[i].book.author.first_name + " " + shelves[i].book.author.last_name,
-                avg_rate: i,
-                rating: i,
+                avg_rate: await calcAvgBookRate(book_rates),
+                rating: book_rates,
                 shelve: shelves[i].shelf,
             };
             newShelves[i] = obj;
         });
         console.log(newShelves)
+        res.set("Content-Type", "application/json");
         return res.json(newShelves);
     }
     catch (err) {

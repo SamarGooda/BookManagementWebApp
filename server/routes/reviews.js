@@ -31,8 +31,9 @@ router.get("/:id", async (request, response) => {
 
 // ==========================================================================
 
-router.post("/", async (request, response) => {
-  const { r, u, b } = request.body;
+router.post("/", auth, async (request, response) => {
+  const u = getUserId(request.cookies.user_token);
+  const { r, b } = request.body;
   console.log("request.body: ", request.body);
 
   try {
