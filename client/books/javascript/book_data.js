@@ -73,7 +73,7 @@ function showRate() {
 
 function save_review() {
   axios
-    .post(BASE_URL + `/reviews`, { r: review.value, b: book_id, u: "5eb9f701f223ca27acaec0ec" })
+    .post(BASE_URL + `/reviews`, { r: review.value, b: book_id, u: "5ebb63758971b62de7931290" })
     .then(function (response) {
       console.log("response: " + JSON.stringify(response));
       let review_detail = response.data;
