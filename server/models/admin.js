@@ -19,5 +19,5 @@ schema.pre("save", async function (next) {
   next();
 });
 
-const admin = mongoose.model(dbHelpers.ADMIN_DOC_NAME, schema);
-module.exports = admin;
+// const admin = mongoose.model(dbHelpers.ADMIN_DOC_NAME, schema);
+module.exports = schema;

@@ -2,7 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 var path = require("path");
 const createError = require("http-errors");
-const adminModel = require("../models/admin");
+const models = require("../models/models");
 const bcrypt = require("bcrypt");
 
 const router = express.Router();
@@ -119,7 +119,7 @@ router.get("/data", async function (req, res) {
   if (!userId) {
     res.status(400).send();
   } else {
-    const admin = await adminModel.findById(userId);
+    const admin = await models.admin.findById(userId);
     res.json(admin.email);
   }
 });
@@ -142,7 +142,7 @@ router.post("/login", async (request, response) => {
   const { email, password } = request.body;
 
   try {
-    const admin = await adminModel.findOne({ email: email });
+    const admin = await models.admin.findOne({ email: email });
     console.log(admin);
 
     if (!admin) {

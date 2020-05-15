@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 
-const authorModel = require("../models/Author");
-const booksModel = require("../models/Book");
+const models = require("../models/models");
 const upload = multer({ dest: "tmp/" });
 
 const { promisify } = require("util");
@@ -15,7 +14,7 @@ const rm = promisify(fs.unlink);
 
 router.get("/data", async (request, response) => {
   try {
-    const authors = await authorModel
+    const authors = await models.author
       .find({})
       .sort({ first_name: 1, last_name: 1 });
     response.json(authors);
@@ -27,7 +26,7 @@ router.get("/data", async (request, response) => {
 
 router.get("/data/:id", async (request, response) => {
   try {
-    const author = await authorModel.findById(request.params.id);
+    const author = await models.author.findById(request.params.id);
     response.json(author);
   } catch (error) {
     console.log(error);
@@ -42,7 +41,7 @@ router.post("/data", upload.single("image"), async (request, response) => {
   console.log("request.body: ", request.body);
   console.log("request.file: ", request.file);
 
-  const new_author = new authorModel({
+  const new_author = new models.author({
     first_name: f,
     last_name: l,
     date_of_birth: dob,
@@ -68,7 +67,7 @@ router.patch("/data/:id", async (request, response) => {
   const { f, l, dob, i } = request.body;
 
   try {
-    const author = await authorModel.findById(request.params.id);
+    const author = await models.author.findById(request.params.id);
     if (author) {
       if (f) author.first_name = f;
       if (l) author.last_name = l;
@@ -90,23 +89,9 @@ router.patch("/data/:id", async (request, response) => {
 
 router.delete("/data/:id", async (request, response) => {
   try {
-    const deletedBooks = await booksModel
-      .find({ author: request.params.id })
-      .deleteMany();
-
-    if (!deletedBooks) {
-      console.log(deletedBooks);
-    }
-
-    const deleted_author = await authorModel.findByIdAndDelete(
+    const deleted_author = await models.author.findByIdAndDelete(
       request.params.id
     );
-
-    let imgFileName = deleted_author.image.split("/")[3];
-    console.log("imgFileName: ", imgFileName);
-
-    await rm(__dirname + "/../" + "public/authors/" + imgFileName + ".png");
-
     response.json(deleted_author);
   } catch (error) {
     console.log(error);

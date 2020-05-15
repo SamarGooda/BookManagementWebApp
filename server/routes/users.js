@@ -9,7 +9,7 @@ const rm = promisify(fs.unlink);
 
 // const auth = require('../middlewares/auth');
 
-const UserModel = require('../models/User');
+const models = require("../models/models");
 
 const db_helpers = require('../helpers/db_helpers');
 const helpers = require('../helpers/general_helpers');
@@ -28,7 +28,7 @@ router.get("/current_user", async function (req, res) {
     if (!userId) {
         res.status(400).send();
     } else {
-        const user = await UserModel.findById(userId);
+        const user = await models.user.findById(userId);
         const data = {
             email: user.email,
 
@@ -58,7 +58,7 @@ router.get('/stylesheets/users.css', (req, res) => {
 // get all users
 router.get('/data', async (req, res) => {
     try {
-        users = await UserModel.find({});
+        users = await models.user.find({});
     }
     catch (err) {
         return res.send(err['message'])
@@ -82,7 +82,7 @@ router.post('/data', upload.single("image"), async (req, res, next) => {
         const relativePath = `/public/users/${fileName}`;
         const targetPath = path.join(__dirname, "..", relativePath);
 
-        const userInstance = new UserModel({
+        const userInstance = new models.user({
             first_name, last_name, password, email, image: relativePath
         });
         user = await userInstance.save();
@@ -101,7 +101,7 @@ router.get('/data/:id', async (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
 
-    user = await UserModel.findById(id);
+    user = await models.user.findById(id);
 
     try {
         return res.json(user);
@@ -114,7 +114,7 @@ router.get('/data/:id', async (req, res) => {
 router.patch('/data/:id', (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
-    UserModel.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true }, (err, user) => {
+    models.user.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true }, (err, user) => {
         if (!err) return res.json({ result: "success", data: user });
         else {
             console.error(err);
@@ -129,7 +129,7 @@ router.delete('/data/:id', async (req, res) => {
     const routeParams = req.params;
     const { id } = routeParams;
     try {
-        user = await UserModel.findOneAndDelete({ _id: id });
+        user = await models.user.findOneAndDelete({ _id: id });
         if (user) return res.json(user);
         return helpers.handleError(res, "user not found");
     }

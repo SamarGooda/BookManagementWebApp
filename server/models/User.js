@@ -27,5 +27,5 @@ schema.methods.getFullName = function getFullName() {
   return this.first_name + " " + this.last_name;
 };
 
-const User = mongoose.model(dbHelpers.USERS_DOC_NAME, schema);
-module.exports = User;
+// const User = mongoose.model(dbHelpers.USERS_DOC_NAME, schema);
+module.exports = schema;

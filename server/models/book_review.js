@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
   review: dbHelpers.reviewTextValidation,
   user: dbHelpers.userValidation,
   book: dbHelpers.bookValidation,
-});
+}).index({ user: 1, book: 1 }, { unique: true });
 
 schema.pre("save", async function (next) {
   try {
@@ -27,5 +27,5 @@ schema.pre("save", async function (next) {
   next();
 });
 
-const review = mongoose.model(dbHelpers.BOOKS_REVIEWS_DOC_NAME, schema);
-module.exports = review;
+// const review = mongoose.model(dbHelpers.BOOKS_REVIEWS_DOC_NAME, schema);
+module.exports = schema;

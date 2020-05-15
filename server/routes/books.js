@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
-const Book = require("../models/Book");
-const Rate = require("../models/book_rate");
+const models = require("../models/models");
+
 const multer = require("multer");
 
 const upload = multer({ dest: "tmp/" });
@@ -17,7 +17,7 @@ router.post("/data", upload.single("image"), async (request, response) => {
   console.log("request.body: ", request.body);
   console.log("request.file: ", request.file);
 
-  const new_book = new Book({
+  const new_book = new models.book({
     title: title,
     author: author,
     category: category,
@@ -39,7 +39,8 @@ router.post("/data", upload.single("image"), async (request, response) => {
 
 router.get("/data", async (req, res, next) => {
   try {
-    const books = await Book.find({})
+    const books = await models.book
+      .find({})
       .populate("author")
       .populate("category")
       .populate({
@@ -58,7 +59,8 @@ router.get("/data", async (req, res, next) => {
 
 router.get("/data/:id", async (req, res, next) => {
   try {
-    const book_data = await Book.findById(req.params.id)
+    const book_data = await models.book
+      .findById(req.params.id)
       .populate("author")
       .populate({
         path: "reviews",
@@ -84,12 +86,12 @@ router.get("/data/:id", async (req, res, next) => {
 // rate for book
 router.get("/avg/:id", async (request, response) => {
   try {
-    const book_data = await Book.findById(request.params.id);
+    const book_data = await models.book.findById(request.params.id);
     if (!book_data) {
       return response.status(404).send();
     }
     const query = { book: request.params.id };
-    const book_rates = await Rate.find(query);
+    const book_rates = await models.rate.find(query);
     let sum = 0;
     for (i = 0; i < book_rates.length; i++) {
       sum += book_rates[i].rate;
@@ -106,14 +108,11 @@ router.get("/avg/:id", async (request, response) => {
 
 router.delete("/data/:id", async (request, response) => {
   try {
-    const deleted_book = await Book.findByIdAndDelete(request.params.id);
+    const book = await models.book.findById(request.params.id);
+    await book.remove();
 
-    let imgFileName = deleted_book.image.split("/")[3];
-    console.log("imgFileName: ", imgFileName);
-
-    await rm(__dirname + "/../" + "public/books/" + imgFileName + ".png");
-
-    response.json(deleted_book);
+    // const deleted_book = await models.book.findByIdAndDelete(request.params.id);
+    response.json(book);
   } catch (error) {
     console.log(error);
     response.status(400).send();
@@ -124,7 +123,7 @@ router.patch("/data/:id", async (req, res, next) => {
   const { title, image, author, category } = req.body;
 
   try {
-    const book = await Book.findById(req.params.id);
+    const book = await models.book.findById(req.params.id);
     if (book) {
       if (title) book.title = title;
       if (author) book.author = author;

@@ -27,5 +27,5 @@ schema.pre("save", async function (next) {
   next();
 });
 
-const User = mongoose.model(dbHelpers.BOOKS_RATES_DOC_NAME, schema);
-module.exports = User;
+// const User = mongoose.model(dbHelpers.BOOKS_RATES_DOC_NAME, schema);
+module.exports = schema;
