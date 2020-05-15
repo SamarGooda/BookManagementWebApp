@@ -47,7 +47,6 @@ router.get("/data", async (req, res, next) => {
           path: "user",
         },
       });
-    // .populate('category')
 
     return res.json(books);
   } catch (err) {
@@ -59,6 +58,7 @@ router.get("/data/:id", async (req, res, next) => {
   try {
     const book_data = await Book.findById(req.params.id)
       .populate("author")
+      .populate("category")
       .populate({
         path: "reviews",
         populate: {
@@ -95,7 +95,10 @@ router.get("/avg/:id", async (request, response) => {
     }
     const avg_rate = sum / book_rates.length;
     console.log(book_rates);
-    response.json(avg_rate);
+    response.json({
+      avg_rate: avg_rate,
+      count: book_rates.length,
+    });
   } catch (error) {
     console.log(error);
     response.status(400).send();

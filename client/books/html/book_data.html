@@ -13,60 +13,60 @@ layout: default
             <div class="review" id="review"></div>
 </div> -->
 <div class="container">
- 
-
-<div class="row">
-    <div class="col-sm-3" style="border: none;">
-      <div class="card" style="border: none;width:250px ;">
-        <div class="card-body">
-          <div id="image"> 
-            <!-- <img class="card-img-top" src="kk.jpg" style="width:200px ;height:100px;" > -->
-          </div>
-          <select class="form-control" id="sel1" style="width:200px ;">
-            <option>All</option>
-            <option>Read</option>
-            <option>Currently Reading</option>
-            <option>Want To Read</option>
-          </select>
-          
-             <div id="saveRate" class="rate">
-        <input type="radio" id="star5" name="rate" value="5" onclick="save_rate()"/>
+  <div class="row no-gutters">
+    <div class="col-auto">
+      <img id="authorImg" src="//placehold.it/200" class="img-fluid" alt="">
+      <select class="form-control" id="sel1" style="width:12rem; margin-top: 1rem;">
+        <option>All</option>
+        <option>Read</option>
+        <option>Currently Reading</option>
+        <option>Want To Read</option>
+      </select>
+      <div id="saveRate" class="rate">
+        <input type="radio" id="star5" name="rate" value="5" onclick="save_rate()" />
         <label for="star5" title="text">5 stars</label>
-        <input type="radio" id="star4" name="rate" value="4" onclick="save_rate()"/>
+        <input type="radio" id="star4" name="rate" value="4" onclick="save_rate()" />
         <label for="star4" title="text">4 stars</label>
-        <input type="radio" id="star3" name="rate" value="3" onclick="save_rate()"/>
+        <input type="radio" id="star3" name="rate" value="3" onclick="save_rate()" />
         <label for="star3" title="text">3 stars</label>
-        <input type="radio" id="star2" name="rate" value="2" onclick="save_rate()"/>
+        <input type="radio" id="star2" name="rate" value="2" onclick="save_rate()" />
         <label for="star2" title="text">2 stars</label>
-        <input type="radio" id="star1" name="rate" value="1" onclick="save_rate()"/>
+        <input type="radio" id="star1" name="rate" value="1" onclick="save_rate()" />
         <label for="star1" title="text">1 star</label>
-    
       </div>
+    </div>
+    <div class="col">
+      <div class="card-block px-2">
+        <h4 class="card-title" id="bookTitle"></h4>
+        <h6 class="card-title" id="bookAuthor"></h6>
+        <h6 class="card-title" id="bookCategory"></h6>
+        <div id="check">
+
         </div>
-       
+        
+        <!-- <div>
+          <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+            electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
+            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
+            PageMaker including versions of Lorem Ipsum. </p>
+        </div> -->
       </div>
     </div>
-    <div class="col-sm-3" style="border: none;">
-      <div  class="card" style="border: none;">
-        <div id="details" class="card-body" style="border: none;">
-          <!-- <h4 class="card-title">Book Name</h4>
-          <a href="#" class="btn " style="color: blue; ">by BookAuthor</a><br>
-          <a href="#" class="btn " style="color: blue;">Category Name</a> -->
-        </div>
-     
-      <div id="check">
-            
-      </div>
-    </div>
-   
-    </div>
+  </div>
+
+  <div class="w-100 text-muted">
+    <h2 id="books_header" style="margin-top: 2rem;">Reviews</h2>
     <div class="card w-75" style="border: outset; width: 100px;">
-        <div class="card-body" >
-          <h5 class="card-title" > Reviews:</h5>
-          <p class="card-text"><p id="review_details"></p><textarea name="comment" id="review" placeholder="Enter your review here..."></textarea>
-            <input type="button" id="save" value="save"><br><br> </p>
-        </div>
+      <div class="card-body">
+        <p class="card-text">
+          <p id="review_details"></p><textarea name="comment" id="review"
+            placeholder="Enter your review here..."></textarea>
+          <input type="button" id="save" value="save"><br><br>
+        </p>
       </div>
+    </div>
   </div>
 </div>
 

@@ -27,29 +27,17 @@ function showBooks(books) {
   eventItem.innerHTML = "";
 
   for (i = 0; i < books.length; i++) {
-    // var div = document.createElement('div');
-    // div.id = 'card';
-    // div.className = 'card';
-
-    // let div = `<div class="event-item" ><img class="img-responsive" src=${books[i].image} >
-    // <h5><a href=${books[i].title}>title</a></h5>
-    // <h5><a href=${books[i].author.first_name}>name</a></h5></div>`
-    // items.innerHTML += div
-
     let div = `<div class="col-sm-3">
         <div class="card">
-        <div class="card-body"><img class="card-img-top" src=${books[i].image}  style="width:100%" ><br>
-        <a href=http://localhost:5000/books/${books[i]._id}  class="btn " > ${books[i].title}</a><br>
-        <a href=${books[i].author.first_name} class="btn " >${books[i].author.first_name} </a></div></div></div>`;
+        <div class="card-body"><img class="card-img-top" src=${
+          books[i].image
+        }  style="width:100%" ><br>
+        <a href="${BASE_URL}/books/${books[i]._id}"> ${books[i].title}</a><br>
+        <a href="${BASE_URL}/authors/${books[i].author._id}">${
+      books[i].author.first_name + " " + books[i].author.last_name
+    } </a></div></div></div>`;
     items.innerHTML += div;
   }
 }
 
 getAllBooks();
-// console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-// console.info(
-//   "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-// );
-
-// ${books[i].category}
-// ${books[i].title}
