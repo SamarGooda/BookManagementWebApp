@@ -1,5 +1,5 @@
 
-// const image = document.getElementById("image")
+const image = document.getElementById("image")
 const details = document.getElementById("details")
 const review_views = document.getElementById("review_details")
 const save = document.getElementById("save")
@@ -34,7 +34,7 @@ function getBook_detail() {
 }
 function showBook(book_detail) {
   console.log("book_detail:", book_detail.reviews)
-  // image.innerHTML = `<p>${book_detail.image}</p><br>`
+  image.innerHTML = `<img class="card-img-top" src="${book_detail.image}" style="width:200px ;height:100px;" > `
   details.innerHTML = `<div  class="card-body" style="border: none;">
                           <p class="card-title">${book_detail.title}</p>
                            <a href="#" "style="color: blue; ">${book_detail.author.first_name}</a>
