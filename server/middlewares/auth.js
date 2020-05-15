@@ -7,7 +7,7 @@ const jwtKey = 'very_hard_secret_key'
 const jwtExpirySeconds = 300
 
 
-function auth(req, res, next) {
+auth = function(req, res, next) {
     // We can obtain the session token from the requests cookies, which come with every request
     const token = req.cookies.user_token
 
@@ -35,7 +35,7 @@ function auth(req, res, next) {
     // Finally, return the welcome message to the user, along with their
     // username given in the token
     req.userData=payload;
-    next()
+    return next()
 }
 
 

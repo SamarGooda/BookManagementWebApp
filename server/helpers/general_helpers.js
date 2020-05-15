@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const jwtKey = 'strong_secret_key';
+const jwtKey = 'very_hard_secret_key';
 
 
 const handleError = (res, msg = "something went wrong", n = 0) => {
