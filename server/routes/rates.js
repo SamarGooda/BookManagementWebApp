@@ -4,6 +4,7 @@ const router = express.Router();
 const ratesModel = require("../models/book_rate");
 const booksModel = require("../models/Book");
 const usersModel = require("../models/User");
+const { getUserId } = require("../helpers/general_helpers");
 
 // ==========================================================================
 
@@ -30,10 +31,9 @@ router.get("/:id", async (request, response) => {
 
 // ==========================================================================
 
-router.post("/", async (request, response) => {
-  const { r, u, b } = request.body;
-  console.log("request.body: ", request.body);
-
+router.post("/", auth, async (request, response) => {
+  const u = getUserId(request.cookies.user_token);
+  const { r, b } = request.body;
   const book = await booksModel.findById(b);
   const user = await usersModel.findById(u);
   if (!book || !user) {

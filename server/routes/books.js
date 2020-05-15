@@ -87,14 +87,8 @@ router.get("/avg/:id", async (request, response) => {
     if (!book_data) {
       return response.status(404).send();
     }
-    const query = { book: request.params.id };
-    const book_rates = await Rate.find(query);
-    let sum = 0;
-    for (i = 0; i < book_rates.length; i++) {
-      sum += book_rates[i].rate;
-    }
-    const avg_rate = sum / book_rates.length;
-    console.log(book_rates);
+    const book_rates = await getBookRates(book_data);
+    const avg_rate = await calcAvgBookRate(book_rates);
     response.json({
       avg_rate: avg_rate,
       count: book_rates.length,
@@ -177,4 +171,22 @@ router.get("/javascript/book_data.js", function (req, res) {
   res.sendFile(path.resolve("../client/_site/books/javascript/book_data.js"));
 });
 
-module.exports = router;
+async function getBookRates(BookInstance) {
+  const query = { book: BookInstance };
+  const book_rates = await Rate.find(query);
+  return book_rates
+}
+
+async function calcAvgBookRate(book_rates) {
+  let sum = 0;
+  for (i = 0; i < book_rates.length; i++) {
+    sum += book_rates[i].rate;
+  }
+  const avg_rate = sum / book_rates.length;
+  return avg_rate;
+}
+
+module.exports =
+  router,
+  getBookRates,
+  calcAvgBookRate;
