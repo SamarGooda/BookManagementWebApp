@@ -46,10 +46,10 @@ function showBooks(books) {
 }
 
 getAllBooks();
-console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-console.info(
-  "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-);
+// console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+// console.info(
+//   "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+// );
 
 // ${books[i].category}
 // ${books[i].title}

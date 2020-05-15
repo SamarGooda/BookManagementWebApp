@@ -34,9 +34,9 @@ function getBook_detail() {
 }
 function showBook(book_detail) {
   console.log("book_detail:", book_detail.reviews)
-  image.innerHTML = `<img class="card-img-top" src="${book_detail.image}" style="width:200px ;height:100px;" > `
+  image.innerHTML = `<img class="card-img-top" src="${book_detail.image}" style="width:200px ;height:250px;" > `
   details.innerHTML = `<div  class="card-body" style="border: none;">
-                          <p class="card-title">${book_detail.title}</p>
+                          <h3 class="card-title">${book_detail.title}</h3>
                            <a href="#" "style="color: blue; ">${book_detail.author.first_name}</a>
                            <a href="#" "style="color: blue;">${book_detail.category} </a></div>`
   showRate()
