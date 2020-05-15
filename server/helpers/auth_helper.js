@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const jwtKey = 'strong_secret_key';
+const jwtKey = 'very_hard_secret_key';
 const jwtExpirySeconds = 300;
 
 

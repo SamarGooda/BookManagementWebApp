@@ -14,10 +14,10 @@ const { handleError, getUserId } = require('../helpers/general_helpers');
 // REST
 
 // get all shelves for a user
-router.get('/data', async (req, res) => {
+router.get('/data', auth, async (req, res) => {
     try {
         user_id = getUserId(req.cookies.user_token);
-        shelves = await ShelfModel.find({user: user_id}).populate({
+        shelves = await ShelfModel.find({ user: user_id }).populate({
             path: 'book',
             populate: {
                 path: 'author'
@@ -31,10 +31,10 @@ router.get('/data', async (req, res) => {
     }
 });
 
-// add new user
-router.post('/data', async (req, res, next) => {
-
-    const { shelf, user, book } = req.body;
+// add new book to shelf
+router.post('/data',auth,  async (req, res, next) => {
+    const user = getUserId(req.cookies.user_token);
+    const { shelf, book } = req.body;
     try {
         const newBookOnShelf = new ShelfModel({
             shelf, user, book

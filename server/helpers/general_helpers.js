@@ -21,7 +21,22 @@ function getUserId(token) {
   return undefined;
 }
 
+function isValidToken(token) {
+  if (!token) {
+    return false;
+  } else {
+    try {
+      jwt.verify(token, jwtKey);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+}
+
 module.exports = {
   handleError,
   getUserId,
+  isValidToken,
 }
