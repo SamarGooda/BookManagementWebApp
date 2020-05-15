@@ -12,8 +12,7 @@ const signIn = async (req, res) => {
   // Get credentials from JSON body
   const { email, password } = req.body;
 
-  try {handleError
-
+  try {
     if (!email || !password) {
       // return 401 error is username or password doesn't exist, or if password does
       // not match the password in our records
@@ -28,7 +27,7 @@ const signIn = async (req, res) => {
         // Create a new token with the email in the payload
         // and which expires 300 seconds after issue
         const id = user._id;
-        const token = jwt.sign( {id}, jwtKey, {
+        const token = jwt.sign({ id }, jwtKey, {
           algorithm: 'HS256',
           expiresIn: jwtExpirySeconds
         })

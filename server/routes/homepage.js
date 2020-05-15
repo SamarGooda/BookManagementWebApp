@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const path = require("path");
-const { promisify } = require("util");
 
 const auth = require("../middlewares/auth");
-const helpers = require("../helpers/general_helpers");
 
 router.get("/", (req, res) => {
   res.set("Content-Type", "text/html");
@@ -25,7 +23,7 @@ router.get('/javascript/default.js', (req, res) => {
 // ===================================
 // route for datatable
 
-router.get('/data/table', async (req, res) => {
+router.get('/data/table', auth, async (req, res) => {
     try {
         user_id = getUserId(req.cookies.user_token);
         shelves = await ShelfModel.find({ user: user_id }).populate({
@@ -35,9 +33,8 @@ router.get('/data/table', async (req, res) => {
             }
         });
         res.set("Content-Type", "application/json");
-        i = 0
         var newShelves = [];
-        Object.keys(shelves).forEach((key, element) => {
+        Object.keys(shelves).forEach((i, element) => {
             let obj = {
                 cover: "i",
                 name: shelves[i].book.title,
@@ -46,12 +43,7 @@ router.get('/data/table', async (req, res) => {
                 rating: i,
                 shelve: shelves[i].shelf,
             };
-            newShelves[key] = obj;
-            // newShelves['author'] 
-            // newShelves['avg_rate'] 
-            // newShelves['rating'] 
-            // newShelves['shelve'] 
-            i++;
+            newShelves[i] = obj;
         });
         console.log(newShelves)
         return res.json(newShelves);
