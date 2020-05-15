@@ -1,15 +1,15 @@
 const express = require("express");
-const router = express.Router();
 const multer = require("multer");
+const path = require("path");
 
 const authorModel = require("../models/Author");
-const booksModel = require("../models/Book");
 const upload = multer({ dest: "tmp/" });
 
 const { promisify } = require("util");
 const fs = require("fs");
 const mv = promisify(fs.rename);
-const rm = promisify(fs.unlink);
+
+const router = express.Router();
 
 // ==========================================================================
 
@@ -99,5 +99,35 @@ router.delete("/data/:id", async (request, response) => {
   }
 });
 // ==========================================================================
+
+router.get("/", function (req, res) {
+  res.set("Content-Type", "text/html");
+  res.sendFile(path.resolve("../client/_site/authors/html/authors.html"));
+});
+
+router.get("/:id", function (req, res) {
+  res.set("Content-Type", "text/html");
+  res.sendFile(path.resolve("../client/_site/authors/html/author.html"));
+});
+
+router.get("/stylesheets/authors.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(path.resolve("../client/_site/authors/stylesheets/authors.css"));
+});
+
+router.get("/stylesheets/author.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(path.resolve("../client/_site/authors/stylesheets/author.css"));
+});
+
+router.get("/javascript/authors.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/authors/javascript/authors.js"));
+});
+
+router.get("/javascript/author.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/authors/javascript/author.js"));
+});
 
 module.exports = router;

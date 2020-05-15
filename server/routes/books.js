@@ -8,7 +8,6 @@ const upload = multer({ dest: "tmp/" });
 const { promisify } = require("util");
 const fs = require("fs");
 const mv = promisify(fs.rename);
-const rm = promisify(fs.unlink);
 
 const router = express.Router();
 
@@ -149,7 +148,7 @@ router.get("/javascript/books.js", function (req, res) {
 
 router.get("/stylesheets/books.css", function (req, res) {
   res.set("Content-Type", "text/css");
-  res.sendFile(path.resolve("../client/_site/book/stylesheets/books.css"));
+  res.sendFile(path.resolve("../client/_site/books/stylesheets/books.css"));
 });
 
 router.get("/", function (req, res) {
