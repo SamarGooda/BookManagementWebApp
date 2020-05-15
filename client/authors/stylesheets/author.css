@@ -1,0 +1,53 @@
+.label {
+  color: rgb(33, 41, 112);
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#authorImg {
+  max-width: 14rem;
+  min-width: 14rem;
+  max-height: 13rem;
+  min-height: 13rem;
+}
+
+#books_header {
+  margin-top: 50px;
+}
+
+#card-title {
+  padding: 10px;
+
+}
+
+.row {
+  margin-right: -15px;
+  /* margin-left: -15px; */
+}
+
+.container {
+  padding-right: 15px;
+  /* padding-left: 0px; */
+  margin-right: auto;
+  /* margin-left: auto; */
+  padding-top: 20px;
+}
+
+.card-deck .container {
+  padding-right: 15px;
+  /* padding-left: 0px; */
+  margin-right: auto;
+  /* margin-left: auto; */
+  padding-top: 5px;
+}
+
+.card-deck {
+  padding: 1rem;
+  margin-bottom: 5rem;
+}
+
+.card-deck .card {
+  max-width: 18rem;
+  min-width: 14rem;
+  margin: 5px;
+}
