@@ -85,6 +85,7 @@ function save_review() {
         if (error.response.status == 404) {
           console.log("error:", 404);
           window.location.replace("/errors/404");
+          
         }
         else {
           console.log("error:", error);
@@ -92,7 +93,49 @@ function save_review() {
       }
     })
 }
-
+function save_rate() {
+  const star5 = document.getElementById("star5")
+  const star4 = document.getElementById("star4")
+  const star3 = document.getElementById("star3")
+  const star2 = document.getElementById("star2")
+  const star1 = document.getElementById("star1")
+   var selectedValue = ""
+  if (star1.checked){
+        selectedValue = star1.value
+         }
+  else if (star2.checked){ 
+         selectedValue = star2.value
+       }
+   else if (star3.checked){ 
+         selectedValue = star3.value
+       }
+    else if (star4.checked){ 
+         selectedValue = star4.value
+       }
+     else if(star5.checked){ 
+         selectedValue = star5.value
+       }   
+  console.log(selectedValue);
+  axios
+  .post(BASE_URL + `/rates`, { r: selectedValue, b: book_id, u:"5eb9f701f223ca27acaec0ec" })
+  .then(function (response) {
+    console.log("response: " + JSON.stringify(response));
+    let review_detail = response.data;
+    console.log("review_detail:", review_detail);
+    //review.value = ""
+  })
+.catch(function (error) {
+    if (error.response) {
+      if (error.response.status == 404) {
+        console.log("error:", 404);
+        window.location.replace("/errors/404");
+      }
+      else {
+        console.log("error:", error);
+      }
+    }
+  })
+}
 
 console.log(window.location.href)
 console.log(window.location.href.substring(window.location.href.lastIndexOf('/') + 1))
