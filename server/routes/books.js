@@ -106,12 +106,8 @@ router.get("/avg/:id", async (request, response) => {
 
 router.delete("/data/:id", async (request, response) => {
   try {
-    const deleted_book = await Book.findByIdAndDelete(request.params.id);
-
-    let imgFileName = deleted_book.image.split("/")[3];
-    console.log("imgFileName: ", imgFileName);
-
-    await rm(__dirname + "/../" + "public/books/" + imgFileName + ".png");
+    const book = await Book.findById(request.params.id);
+    const deleted_book = await book.remove();
 
     response.json(deleted_book);
   } catch (error) {

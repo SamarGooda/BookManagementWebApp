@@ -90,23 +90,8 @@ router.patch("/data/:id", async (request, response) => {
 
 router.delete("/data/:id", async (request, response) => {
   try {
-    const deletedBooks = await booksModel
-      .find({ author: request.params.id })
-      .deleteMany();
-
-    if (!deletedBooks) {
-      console.log(deletedBooks);
-    }
-
-    const deleted_author = await authorModel.findByIdAndDelete(
-      request.params.id
-    );
-
-    let imgFileName = deleted_author.image.split("/")[3];
-    console.log("imgFileName: ", imgFileName);
-
-    await rm(__dirname + "/../" + "public/authors/" + imgFileName + ".png");
-
+    const author = await authorModel.findById(request.params.id);
+    const deleted_author = await author.remove();
     response.json(deleted_author);
   } catch (error) {
     console.log(error);
