@@ -1,12 +1,13 @@
 const express = require('express');
 const helpers = require('../helpers/general_helpers');
 const auth_helper = require('../helpers/auth_helper');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { handleError } = require('../helpers/general_helpers');
 const jwtKey = 'very_hard_secret_key'
 const jwtExpirySeconds = 300
 
 
-function auth(req, res, next) {
+auth = function(req, res, next) {
     // We can obtain the session token from the requests cookies, which come with every request
     const token = req.cookies.user_token
 
@@ -25,16 +26,16 @@ function auth(req, res, next) {
     } catch (e) {
         if (e instanceof jwt.JsonWebTokenError) {
             // if the error thrown is because the JWT is unauthorized, return a 401 error
-            return 
+            return handleError(res, 'the JWT is unauthorized');
         }
         // otherwise, return a bad request error
-        return helpers.handleError(res)
+        return handleError(res)
     }
 
     // Finally, return the welcome message to the user, along with their
     // username given in the token
     req.userData=payload;
-    next()
+    return next()
 }
 
 
