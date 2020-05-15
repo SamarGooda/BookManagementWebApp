@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 
 const authorModel = require("../models/Author");
+const booksModel = require("../models/Book");
 const upload = multer({ dest: "tmp/" });
 
 const { promisify } = require("util");
@@ -29,6 +30,18 @@ router.get("/data/:id", async (request, response) => {
   try {
     const author = await authorModel.findById(request.params.id);
     response.json(author);
+  } catch (error) {
+    console.log(error);
+    response.status(400).send();
+  }
+});
+
+router.get("/data/:id/books", async (request, response) => {
+  try {
+    console.log(request.params.id);
+
+    const books = await booksModel.find({ author: request.params.id });
+    response.json(books);
   } catch (error) {
     console.log(error);
     response.status(400).send();
