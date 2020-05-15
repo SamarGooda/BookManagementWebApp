@@ -144,18 +144,17 @@ router.patch("/data/:id", async (req, res, next) => {
 
 router.get("/javascript/books.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
-  res.sendFile(path.resolve("../client/_site/javascript/books.js"));
+  res.sendFile(path.resolve("../client/_site/books/javascript/books.js"));
 });
 
-router.get("/stylecheets/books.css", function (req, res) {
+router.get("/stylesheets/books.css", function (req, res) {
   res.set("Content-Type", "text/css");
-  res.sendFile(path.resolve("../client/_site/stylecheets/books.css"));
+  res.sendFile(path.resolve("../client/_site/book/stylesheets/books.css"));
 });
 
 router.get("/", function (req, res) {
-  
   res.set("Content-Type", "text/html");
-  res.sendFile(path.resolve("../client/_site/html/books/books.html"));
+  res.sendFile(path.resolve("../client/_site/books/html/books.html"));
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,17 +162,17 @@ router.get("/", function (req, res) {
 //routes for book_details
 router.get("/:id", function (req, res) {
   res.set("Content-Type", "text/html");
-  res.sendFile(path.resolve("../client/_site/html/books/book_data.html"));
+  res.sendFile(path.resolve("../client/_site/books/html/book_data.html"));
 });
 
-router.get("/stylecheets/book_data.css", function (req, res) {
+router.get("/stylesheets/book_data.css", function (req, res) {
   res.set("Content-Type", "text/css");
-  res.sendFile(path.resolve("../client/_site/stylecheets/book_data.css"));
+  res.sendFile(path.resolve("../client/_site/books/stylesheets/book_data.css"));
 });
 
 router.get("/javascript/book_data.js", function (req, res) {
   res.set("Content-Type", "text/javascript");
-  res.sendFile(path.resolve("../client/_site/javascript/book_data.js"));
+  res.sendFile(path.resolve("../client/_site/books/javascript/book_data.js"));
 });
 
 module.exports = router;
