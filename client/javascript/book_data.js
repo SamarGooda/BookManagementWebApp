@@ -120,8 +120,8 @@ function save_rate() {
   .post(BASE_URL + `/rates`, { r: selectedValue, b: book_id, u:"5eb9f701f223ca27acaec0ec" })
   .then(function (response) {
     console.log("response: " + JSON.stringify(response));
-    let review_detail = response.data;
-    console.log("review_detail:", review_detail);
+    let rate_detail = response.data;
+    console.log("rate_detail:", rate_detail);
     //review.value = ""
   })
 .catch(function (error) {
