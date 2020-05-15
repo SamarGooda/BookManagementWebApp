@@ -36,9 +36,9 @@ function showBook(book_detail) {
   console.log("book_detail:", book_detail.reviews)
   // image.innerHTML = `<p>${book_detail.image}</p><br>`
   details.innerHTML = `<div  class="card-body" style="border: none;">
-                          <h4 class="card-title">${book_detail.title}</h4>
-                           <a href="#" class="btn " style="color: blue; ">by BookAuthor: ${book_detail.author.first_name}</a><br>
-                           <a href="#" class="btn " style="color: blue;">Category Name: ${book_detail.category} </a></div>`
+                          <p class="card-title">${book_detail.title}</p>
+                           <a href="#" "style="color: blue; ">${book_detail.author.first_name}</a>
+                           <a href="#" "style="color: blue;">${book_detail.category} </a></div>`
   showRate()
   for (i = 0; i < book_detail.reviews.length; i++) {
     review_views.innerHTML += `<p>${book_detail.reviews[i].user.first_name}` + ":" + `${book_detail.reviews[i].review}</p>`
@@ -66,7 +66,7 @@ function showRate() {
     else {
       div += `<div class="fa fa-star"></div>`
     }
-    check.innerHTML = div
+    check.innerHTML = div 
   }
 })
 }
