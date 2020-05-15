@@ -117,7 +117,7 @@ function save_rate() {
        }   
   console.log(selectedValue);
   axios
-  .post(BASE_URL + `/rates`, { r: selectedValue, b: book_id, u:"5eb9f701f223ca27acaec0ec" })
+  .post(BASE_URL + `/rates` , { r: selectedValue, b: book_id, u:"5eb9f701f223ca27acaec0ec" })
   .then(function (response) {
     console.log("response: " + JSON.stringify(response));
     let rate_detail = response.data;
