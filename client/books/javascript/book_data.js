@@ -42,8 +42,12 @@ function showBook(book_detail) {
 
   for (i = 0; i < book_detail.reviews.length; i++) {
     review_views.innerHTML +=
-      `<p>${book_detail.reviews[i].user.first_name}` +
-      ":" +
+      `<p>${
+        book_detail.reviews[i].user.first_name +
+        " " +
+        book_detail.reviews[i].user.last_name
+      }` +
+      ":  " +
       `${book_detail.reviews[i].review}</p>`;
   }
 }
@@ -73,13 +77,15 @@ function save_review() {
     .post(BASE_URL + `/reviews`, {
       r: review.value,
       b: book_id,
-      u: "5ebb63758971b62de7931290",
+      u: "5ebb4044f6abe97a8d533749",
     })
     .then(function (response) {
       console.log("response: " + JSON.stringify(response));
       let review_detail = response.data;
       console.log("review_detail:", review_detail);
       review.value = "";
+
+      getBook_detail();
     })
     .catch(function (error) {
       if (error.response) {
@@ -92,6 +98,7 @@ function save_review() {
       }
     });
 }
+
 function save_rate() {
   const star5 = document.getElementById("star5");
   const star4 = document.getElementById("star4");
