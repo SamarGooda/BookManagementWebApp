@@ -21,7 +21,7 @@ function showAuthors(authors) {
                 <img src="${author.image}" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title">
-                    <a href="${author._id}" target="_blank">
+                    <a href="${author._id}">
                        ${author.first_name + " " + author.last_name}
                     </a>
                   </h5>

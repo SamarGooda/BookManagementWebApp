@@ -19,7 +19,7 @@ function showCategories(categories) {
     html += `<div class="card">
                 <div class="card-body">
                   <h5 class="card-title">
-                    <a href="/categories/${category._id}" target="_blank">
+                    <a href="/categories/${category._id}">
                        ${category.name}
                     </a>
                   </h5>
