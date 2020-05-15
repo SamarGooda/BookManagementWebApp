@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const categoriesModel = require("../models/Category");
+const booksModel = require("../models/Book");
+
+const path = require("path");
+
+// ---------------------------------------------------------
 
 router.get("/data", async (req, res) => {
   try {
@@ -67,15 +72,65 @@ router.patch("/data/:id", async (req, res) => {
 
 router.delete("/data/:id", async (req, res) => {
   try {
-    const deleted_category = await categoriesModel.findByIdAndDelete(
-      req.params.id
-    );
+    const category = await categoriesModel.findById(req.params.id);
+    const deleted_category = await category.remove();
     if (deleted_category) res.json(deleted_category);
     else res.status(400).send();
   } catch (error) {
     console.log(error);
     res.status(400).send();
   }
+});
+
+router.get("/data/:id/books", async (request, response) => {
+  try {
+    console.log(request.params.id);
+
+    const books = await booksModel.find({ category: request.params.id });
+    response.json(books);
+  } catch (error) {
+    console.log(error);
+    response.status(400).send();
+  }
+});
+// ---------------------------------------------------------
+
+router.get("/", function (req, res) {
+  res.set("Content-Type", "text/html");
+  res.sendFile(path.resolve("../client/_site/categories/html/categories.html"));
+});
+
+router.get("/:id", function (req, res) {
+  res.set("Content-Type", "text/html");
+  res.sendFile(path.resolve("../client/_site/categories/html/category.html"));
+});
+
+router.get("/stylesheets/categories.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(
+    path.resolve("../client/_site/categories/stylesheets/categories.css")
+  );
+});
+
+router.get("/stylesheets/category.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(
+    path.resolve("../client/_site/categories/stylesheets/category.css")
+  );
+});
+
+router.get("/javascript/categories.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(
+    path.resolve("../client/_site/categories/javascript/categories.js")
+  );
+});
+
+router.get("/javascript/category.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(
+    path.resolve("../client/_site/categories/javascript/category.js")
+  );
 });
 
 module.exports = router;

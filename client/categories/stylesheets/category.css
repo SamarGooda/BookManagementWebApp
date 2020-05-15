@@ -1,0 +1,26 @@
+#categoryTitle {
+  padding: 10px;
+}
+
+.row {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+.card-deck {
+  padding: 1rem;
+}
+
+.card-deck .card {
+  max-width: 18rem;
+  min-width: 14rem;
+  margin: 5px;
+}

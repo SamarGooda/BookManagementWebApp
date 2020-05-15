@@ -20,41 +20,38 @@ function onRefreshAuthorsBtnClicked(e) {
 }
 
 function onAddAuthorBtnClicked(e) {
-  console.log("id", this.id);
   let html = "";
   html += `<div class="form-group">
-          <label for="fname">First Name</label>
-          <input type="text" class="form-control" name="f", id="fname" placeholder="John">
+          <input type="text" class="form-control" name="f", id="fname" placeholder="First Name">
           </div>`;
   html += `<div class="form-group">
-          <label for="lname">Last Name</label>
-          <input type="text" class="form-control" name="l", id="lname" placeholder="Smith">
+          <input type="text" class="form-control" name="l", id="lname" placeholder="Last Name">
           </div>`;
   html += `<div class="form-group">
-          <label for="dob">Date of birth</label>
-          <input type="text" class="form-control" name="dob", id="dob" placeholder="1990-01-01">
+          <input type="text" class="form-control" name="dob", id="dob" placeholder="Birth Date (example: 1990-01-01)">
           </div>`;
-  html += `<div class="form-group">
-          <label for="i">Select image</label>
-          <input type="file" accept="image/*" class="form-control" name="image", id="i">
+
+  html += `<div class="custom-file">
+          <label>Select image</label>
+          <input type="file" class="custom-file-input" accept="image/*" name="image", id="i">
+          <label class="custom-file-label" for="i">Choose image</label>
           </div>`;
 
   document.getElementById("form_inputs").innerHTML = html;
 
-  openCreateForm();
+  $(".custom-file-input").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
 
-  console.log($(".nav-tabs .active").id);
+  openCreateForm();
 }
 
 function onAuthorDeleteBtnClicked(e) {
-  console.log("this.id: ", this.id);
-
   let author_id = this.id.replace("btn_delete_", "");
-  console.log("author_id: ", author_id);
   axios
-    .delete(BASE_URL + "/authors/" + author_id)
+    .delete(BASE_URL + "/authors/data/" + author_id)
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       if (response.status == 200) {
         getAllAuthors();
       }
@@ -68,11 +65,9 @@ function onAuthorDeleteBtnClicked(e) {
 
 function getAllAuthors() {
   axios
-    .get(BASE_URL + "/authors")
+    .get(BASE_URL + "/authors/data")
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let authors = response.data;
-      console.log("authors:", authors);
       showAuthors(authors);
     })
     .catch(function (error) {
@@ -83,20 +78,41 @@ function getAllAuthors() {
 // --------------------------------------------------------------------
 
 function onCreateNewAuthor() {
+  let imageInput = document.getElementById("i");
+  let fnamenput = document.getElementById("fname");
+  let lnameInput = document.getElementById("lname");
+  let dobInput = document.getElementById("dob");
+
+  if (!fnamenput.value) {
+    alert("Please enter author first name!");
+    return;
+  }
+  if (!lnameInput.value) {
+    alert("Please enter author last name!");
+    return;
+  }
+  if (!dobInput.value) {
+    alert("Please enter author first date of birth!");
+    return;
+  }
+  if (!imageInput.files[0]) {
+    alert("Please select author image!");
+    return;
+  }
+
   var formData = new FormData();
-  formData.append("image", document.getElementById("i").files[0]);
-  formData.append("f", document.getElementById("fname").value);
-  formData.append("l", document.getElementById("lname").value);
-  formData.append("dob", document.getElementById("dob").value);
+  formData.append("image", imageInput.files[0]);
+  formData.append("f", fnamenput.value);
+  formData.append("l", lnameInput.value);
+  formData.append("dob", dobInput.value);
 
   axios
-    .post(BASE_URL + "/authors", formData, {
+    .post(BASE_URL + "/authors/data", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       getAllAuthors();
     })
     .catch(function (error) {
@@ -104,10 +120,9 @@ function onCreateNewAuthor() {
       alert("Could not create Author!");
     });
 
-  document.getElementById("fname").value = "";
-  document.getElementById("lname").value = "";
-  document.getElementById("dob").value = "";
-  document.getElementById("i").value = "";
+  document.getElementById("form_inputs").innerHTML = "";
+
+  closeCreateForm();
 }
 
 // --------------------------------------------------------------------

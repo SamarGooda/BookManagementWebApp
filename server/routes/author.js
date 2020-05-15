@@ -1,18 +1,20 @@
 const express = require("express");
-const router = express.Router();
-var multer = require("multer");
+const multer = require("multer");
+const path = require("path");
 
 const authorModel = require("../models/Author");
-const upload = multer({ dest: "../tmp" });
+const booksModel = require("../models/Book");
+const upload = multer({ dest: "tmp/" });
 
 const { promisify } = require("util");
 const fs = require("fs");
 const mv = promisify(fs.rename);
-const rm = promisify(fs.unlink);
+
+const router = express.Router();
 
 // ==========================================================================
 
-router.get("/", async (request, response) => {
+router.get("/data", async (request, response) => {
   try {
     const authors = await authorModel
       .find({})
@@ -24,7 +26,7 @@ router.get("/", async (request, response) => {
   }
 });
 
-router.get("/:id", async (request, response) => {
+router.get("/data/:id", async (request, response) => {
   try {
     const author = await authorModel.findById(request.params.id);
     response.json(author);
@@ -34,10 +36,22 @@ router.get("/:id", async (request, response) => {
   }
 });
 
+router.get("/data/:id/books", async (request, response) => {
+  try {
+    console.log(request.params.id);
+
+    const books = await booksModel.find({ author: request.params.id });
+    response.json(books);
+  } catch (error) {
+    console.log(error);
+    response.status(400).send();
+  }
+});
+
 // ==========================================================================
 
-router.post("/", upload.single("image"), async (request, response) => {
-  const { f, l, dob, i } = request.body;
+router.post("/data", upload.single("image"), async (request, response) => {
+  const { f, l, dob } = request.body;
   console.log("request.body: ", request.body);
   console.log("request.file: ", request.file);
 
@@ -51,7 +65,7 @@ router.post("/", upload.single("image"), async (request, response) => {
   try {
     const saved_author = await new_author.save();
     await mv(
-      __dirname + "/../../" + "tmp/" + request.file.filename,
+      __dirname + "/../" + "tmp/" + request.file.filename,
       __dirname + "/../" + "public/authors/" + request.file.filename + ".png"
     );
     response.json(saved_author);
@@ -63,7 +77,7 @@ router.post("/", upload.single("image"), async (request, response) => {
 
 // ==========================================================================
 
-router.patch("/:id", async (request, response) => {
+router.patch("/data/:id", async (request, response) => {
   const { f, l, dob, i } = request.body;
 
   try {
@@ -87,17 +101,10 @@ router.patch("/:id", async (request, response) => {
 
 // ==========================================================================
 
-router.delete("/:id", async (request, response) => {
+router.delete("/data/:id", async (request, response) => {
   try {
-    const deleted_author = await authorModel.findByIdAndDelete(
-      request.params.id
-    );
-
-    let imgFileName = deleted_author.image.split("/")[3];
-    console.log("imgFileName: ", imgFileName);
-
-    await rm(__dirname + "/../" + "public/authors/" + imgFileName + ".png");
-
+    const author = await authorModel.findById(request.params.id);
+    const deleted_author = await author.remove();
     response.json(deleted_author);
   } catch (error) {
     console.log(error);
@@ -105,5 +112,35 @@ router.delete("/:id", async (request, response) => {
   }
 });
 // ==========================================================================
+
+router.get("/", function (req, res) {
+  res.set("Content-Type", "text/html");
+  res.sendFile(path.resolve("../client/_site/authors/html/authors.html"));
+});
+
+router.get("/:id", function (req, res) {
+  res.set("Content-Type", "text/html");
+  res.sendFile(path.resolve("../client/_site/authors/html/author.html"));
+});
+
+router.get("/stylesheets/authors.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(path.resolve("../client/_site/authors/stylesheets/authors.css"));
+});
+
+router.get("/stylesheets/author.css", function (req, res) {
+  res.set("Content-Type", "text/css");
+  res.sendFile(path.resolve("../client/_site/authors/stylesheets/author.css"));
+});
+
+router.get("/javascript/authors.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/authors/javascript/authors.js"));
+});
+
+router.get("/javascript/author.js", function (req, res) {
+  res.set("Content-Type", "text/javascript");
+  res.sendFile(path.resolve("../client/_site/authors/javascript/author.js"));
+});
 
 module.exports = router;

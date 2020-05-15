@@ -1,0 +1,76 @@
+---
+title: Index
+layout: default
+---
+
+
+<link rel="stylesheet" href="/books/stylesheets/book_data.css">
+
+<!-- <h1>Book details</h1> -->
+<!-- <div class="main" id="main">
+    <div class="image" id="image"></div>
+        <div class="details" id="details"></div>
+            <div class="review" id="review"></div>
+</div> -->
+<div class="container">
+  <div class="row no-gutters">
+    <div class="col-auto">
+      <img id="authorImg" src="//placehold.it/200" class="img-fluid" alt="">
+      <select class="form-control" id="sel1" style="width:12rem; margin-top: 1rem;">
+        <option>All</option>
+        <option>Read</option>
+        <option>Currently Reading</option>
+        <option>Want To Read</option>
+      </select>
+      <div id="saveRate" class="rate">
+        <input type="radio" id="star5" name="rate" value="5" onclick="save_rate()" />
+        <label for="star5" title="text">5 stars</label>
+        <input type="radio" id="star4" name="rate" value="4" onclick="save_rate()" />
+        <label for="star4" title="text">4 stars</label>
+        <input type="radio" id="star3" name="rate" value="3" onclick="save_rate()" />
+        <label for="star3" title="text">3 stars</label>
+        <input type="radio" id="star2" name="rate" value="2" onclick="save_rate()" />
+        <label for="star2" title="text">2 stars</label>
+        <input type="radio" id="star1" name="rate" value="1" onclick="save_rate()" />
+        <label for="star1" title="text">1 star</label>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card-block px-2">
+        <h4 class="card-title" id="bookTitle"></h4>
+        <h6 class="card-title" id="bookAuthor"></h6>
+        <h6 class="card-title" id="bookCategory"></h6>
+        <div id="check">
+
+        </div>
+
+        <!-- <div>
+          <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into
+            electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of
+            Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
+            PageMaker including versions of Lorem Ipsum. </p>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="w-100 text-muted">
+    <h2 id="books_header" style="margin-top: 2rem;">Reviews</h2>
+    <div class="card w-75" style="border: outset; width: 100px;">
+      <div class="card-body">
+        <p class="card-text">
+          <p id="review_details"></p><textarea name="comment" id="review"
+            placeholder="Enter your review here..."></textarea>
+          <input type="button" id="save" value="save"><br><br>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/books/javascript/book_data.js"></script>
+<script>
+  document.getElementById('booksNav').classList.add("active");
+</script>
