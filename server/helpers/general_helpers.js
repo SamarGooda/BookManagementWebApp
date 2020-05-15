@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const jwtKey = 'strong_secret_key';
 
 
 const handleError = (res, msg = "something went wrong", n = 0) => {
@@ -6,21 +7,21 @@ const handleError = (res, msg = "something went wrong", n = 0) => {
 }
 
 function getUserId(token) {
-  console.info("getUserId ======================>");
+  console.info("====getUserId====");
   if (token) {
     try {
       const decoded = jwt.verify(token, jwtKey);
-      console.info("decoded", decoded);
-      return decoded.payload;
+      console.info("decoded id", decoded.id);
+      return decoded.id;
     } catch (e) {
       console.error(e);
     }
   }
-
+  console.error('user is not logged in');
   return undefined;
 }
 
 module.exports = {
   handleError,
-  getUserId, 
+  getUserId,
 }

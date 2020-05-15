@@ -4,7 +4,7 @@ const userModel = require("./User");
 const bookModel = require("./Book");
 
 const schema = new mongoose.Schema({
-  shelve: dbHelpers.shelveTypeValidation,
+  shelf: dbHelpers.shelfTypeValidation,
   user: dbHelpers.userValidation,
   book: dbHelpers.bookValidation,
 });

@@ -77,7 +77,7 @@ const bookValidation = {
   required: true,
 };
 
-const shelveTypeValidation = {
+const shelfTypeValidation = {
   type: String,
   enum: ["none", "read", "current", "want"],
   default: "none",
@@ -114,7 +114,7 @@ module.exports = {
   reviewTextValidation: reviewTextValidation,
   userValidation: userValidation,
   bookValidation: bookValidation,
-  shelveTypeValidation: shelveTypeValidation,
+  shelfTypeValidation: shelfTypeValidation,
   rateValueValidation: rateValueValidation,
   bookReviewValidation: bookReviewValidation,
   bookRateValidation: bookRateValidation,

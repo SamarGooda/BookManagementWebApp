@@ -3,21 +3,21 @@ const bcrypt = require('bcrypt');
 const jwtKey = 'strong_secret_key';
 const jwtExpirySeconds = 300;
 
-const helpers = require('./general_helpers');
 
 const UserModel = require('../models/User');
+const { handleError } = require('./general_helpers');
 
 
 const signIn = async (req, res) => {
   // Get credentials from JSON body
   const { email, password } = req.body;
 
-  try {
+  try {handleError
 
     if (!email || !password) {
       // return 401 error is username or password doesn't exist, or if password does
       // not match the password in our records
-      return helpers.handleError(res, "missing email or password");
+      return handleError(res, "missing email or password");
     } else if (email && password) {
       user = await UserModel.findOne({ email: email });
       console.log(password);
@@ -38,11 +38,11 @@ const signIn = async (req, res) => {
         // here, the max age is in milliseconds, so we multiply by 1000
         res.cookie('user_token', token, { maxAge: jwtExpirySeconds * 1000 });
         return res.json({ status: 1, message: "sign in success" });;
-      } else return helpers.handleError(res, "invalid email or password");
+      } else return handleError(res, "invalid email or password");
     }
   } catch (err) {
     console.log(err);
-    return helpers.handleError(res);
+    return handleError(res);
   }
 }
 
