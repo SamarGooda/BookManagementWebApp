@@ -109,17 +109,6 @@ async function sendAjaxRequest(url, method) {
       // accept: "image/jpeg, image/pjpeg"
     });
 
-    // Form Submission
-    // $('#register-form')
-    // 	.ajaxForm({
-    // 		url: '127.0.0.1:5000/users',
-    // 		type: "POST",
-    // 		dataType: 'json',
-    // 		success: function (response) {
-    // 			alert("The server says: " + response);
-    // 		}
-    // 	})
-    // 	;
     $("#register-form").submit(function (e) {
       // e.preventDefault();
       remove_loading($(this));
@@ -151,7 +140,6 @@ async function sendAjaxRequest(url, method) {
       remove_loading($(this));
 
       if (options["useAJAX"] == true) {
-        // Dummy AJAX request (Replace this with your AJAX code)
         // If you don't want to use AJAX, remove this
         submit_form($(this));
 
@@ -187,6 +175,9 @@ async function sendAjaxRequest(url, method) {
         .find(".login-form-main-message")
         .addClass("show success")
         .html(options["msg-success"]);
+        
+      //redirecting to home
+      window.location.href = "/";
     }
 
     function form_failed($form) {
@@ -197,9 +188,6 @@ async function sendAjaxRequest(url, method) {
         .html(options["msg-error"]);
     }
 
-    // Dummy Submit Form (Remove this)
-    //----------------------------------------------
-    // This is just a dummy form submission. You should use your AJAX function or remove this function if you are not using AJAX.
     function submit_form(url, $form) {
       if ($form.valid()) {
         form_loading($form);

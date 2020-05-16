@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const auth = require("../middlewares/auth");
 
 const authorModel = require("../models/Author");
 const booksModel = require("../models/Book");

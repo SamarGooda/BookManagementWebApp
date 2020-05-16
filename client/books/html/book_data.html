@@ -17,10 +17,10 @@ layout: default
     <div class="col-auto">
       <img id="authorImg" src="//placehold.it/200" class="img-fluid" alt="">
       <select class="form-control" id="sel1" style="width:12rem; margin-top: 1rem;">
-        <option>All</option>
-        <option>Read</option>
-        <option>Currently Reading</option>
-        <option>Want To Read</option>
+        <option value="none">---Add to shelf---</option>
+        <option value="read">Read</option>
+        <option value="current">Currently Reading</option>
+        <option value="want">Want To Read</option>
       </select>
       <div id="saveRate" class="rate">
         <input type="radio" id="star5" name="rate" value="5" onclick="save_rate()" />

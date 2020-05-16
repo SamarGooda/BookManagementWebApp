@@ -2,19 +2,17 @@ const review_views = document.getElementById("review_details");
 const save = document.getElementById("save");
 const review = document.getElementById("review");
 const check = document.getElementById("check");
+const shelfSelector = document.getElementById("sel1");
 const book_id = window.location.href.substring(
   window.location.href.lastIndexOf("/") + 1
 );
 const BASE_URL = "http://localhost:5000";
 
 function getBook_detail() {
-  console.log(window.location.href);
   axios
     .get(BASE_URL + `/books/data/${book_id}`)
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let book_detail = response.data;
-      console.log("book:", book_detail);
       showBook(book_detail);
     })
 
@@ -31,7 +29,6 @@ function getBook_detail() {
     });
 }
 function showBook(book_detail) {
-  console.log("book_detail:", book_detail.reviews);
   document.getElementById("bookTitle").innerHTML = book_detail.title;
   document.getElementById("bookAuthor").innerHTML =
     book_detail.author.first_name + " " + book_detail.author.last_name;
@@ -43,9 +40,9 @@ function showBook(book_detail) {
   for (i = 0; i < book_detail.reviews.length; i++) {
     review_views.innerHTML +=
       `<p>${
-        book_detail.reviews[i].user.first_name +
-        " " +
-        book_detail.reviews[i].user.last_name
+      book_detail.reviews[i].user.first_name +
+      " " +
+      book_detail.reviews[i].user.last_name
       }` +
       ":  " +
       `${book_detail.reviews[i].review}</p>`;
@@ -54,9 +51,7 @@ function showBook(book_detail) {
 
 function showRate() {
   axios.get(BASE_URL + `/books/avg/${book_id}`).then(function (response) {
-    console.log("response: " + JSON.stringify(response));
     let book_rate = response.data;
-    console.log("book:", book_rate);
 
     let div = "";
     let count = book_rate.avg_rate;
@@ -71,6 +66,47 @@ function showRate() {
     check.innerHTML += `   (${book_rate.count} ratings)`;
   });
 }
+// ============================
+// shelf related functions
+$(document).ready(async function () {
+  fetch("http://localhost:5000/shelves/data/" + book_id)
+    .then((dataWrappedByPromise) => dataWrappedByPromise.json())
+    .then((data) => {
+      setCurrentBookShelf('sel1', data.shelf)
+    })
+    .catch(err => alert("Couldn't get current shelf :("))
+  function setCurrentBookShelf(id, valueToSelect) {
+    let element = document.getElementById(id);
+    element.value = valueToSelect;
+  }
+  addToShelfEvent = (e) => {
+    const url = "http://localhost:5000/shelves/data";
+    const newState = e.target.value;
+    const data = {
+      book: book_id,
+      shelf: newState
+    }
+    fetch(url, {
+      method: "post",
+      mode: 'cors',
+      headers: {
+        "Content-Type": "application/json", // sent request
+        Accept: "application/json", // expected data sent back
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (!res || res.status !== 200) alert('Something went wrong, your book might not be on the recently selected shelf :(');
+      })
+      .catch((error) => {
+        alert('Something went wrong, your book might not be on the recently selected shelf :(');
+      });
+  }
+
+  shelfSelector.addEventListener('change', addToShelfEvent);
+
+});
+// ============================
 
 function save_review() {
   axios
@@ -80,9 +116,7 @@ function save_review() {
       u: "5ebb4044f6abe97a8d533749",
     })
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let review_detail = response.data;
-      console.log("review_detail:", review_detail);
       review.value = "";
 
       getBook_detail();
@@ -90,10 +124,9 @@ function save_review() {
     .catch(function (error) {
       if (error.response) {
         if (error.response.status == 404) {
-          console.log("error:", 404);
           window.location.replace("/errors/404");
         } else {
-          console.log("error:", error);
+          alert("Something went wrong, your review didn't reach us :(");
         }
       }
     });
@@ -117,7 +150,6 @@ function save_rate() {
   } else if (star5.checked) {
     selectedValue = star5.value;
   }
-  console.log(selectedValue);
   axios
     .post(BASE_URL + `/rates`, {
       r: selectedValue,
@@ -125,24 +157,20 @@ function save_rate() {
       u: "5eb9f701f223ca27acaec0ec",
     })
     .then(function (response) {
-      console.log("response: " + JSON.stringify(response));
       let rate_detail = response.data;
-      console.log("rate_detail:", rate_detail);
       //review.value = ""
     })
     .catch(function (error) {
       if (error.response) {
         if (error.response.status == 404) {
-          console.log("error:", 404);
           window.location.replace("/errors/404");
         } else {
-          console.log("error:", error);
+          console.error("error:", error);
         }
       }
     });
 }
 
-console.log(window.location.href);
 console.log(
   window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
 );

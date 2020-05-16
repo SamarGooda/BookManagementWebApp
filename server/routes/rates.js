@@ -5,6 +5,7 @@ const ratesModel = require("../models/book_rate");
 const booksModel = require("../models/Book");
 const usersModel = require("../models/User");
 const { getUserId } = require("../helpers/general_helpers");
+const { getBookRates, calcAvgBookRate } = require("../helpers/rate_helpers");
 
 // ==========================================================================
 

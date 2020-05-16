@@ -8,6 +8,7 @@ const upload = multer({ dest: "tmp/" });
 const { promisify } = require("util");
 const fs = require("fs");
 const mv = promisify(fs.rename);
+const { getBookRates, calcAvgBookRate } = require("../helpers/rate_helpers")
 
 const router = express.Router();
 
@@ -171,22 +172,6 @@ router.get("/javascript/book_data.js", function (req, res) {
   res.sendFile(path.resolve("../client/_site/books/javascript/book_data.js"));
 });
 
-async function getBookRates(BookInstance) {
-  const query = { book: BookInstance };
-  const book_rates = await Rate.find(query);
-  return book_rates
-}
 
-async function calcAvgBookRate(book_rates) {
-  let sum = 0;
-  for (i = 0; i < book_rates.length; i++) {
-    sum += book_rates[i].rate;
-  }
-  const avg_rate = sum / book_rates.length;
-  return avg_rate;
-}
 
-module.exports =
-  router,
-  getBookRates,
-  calcAvgBookRate;
+module.exports = router

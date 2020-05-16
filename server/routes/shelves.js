@@ -32,16 +32,17 @@ router.get('/data', auth, async (req, res) => {
 });
 
 // add new book to shelf
-router.post('/data',auth,  async (req, res, next) => {
-    const user = getUserId(req.cookies.user_token);
-    const { shelf, book } = req.body;
+router.post('/data', auth, async (req, res, next) => {
     try {
-        const newBookOnShelf = new ShelfModel({
-            shelf, user, book
-        });
-        result = await newBookOnShelf.save();
-        return res.json(result);
-
+        const user = getUserId(req.cookies.user_token);
+        const { shelf, book } = req.body;
+        const query = {
+            user: user,
+            book: book,
+        }
+        const newData = { shelf: shelf }
+        const upsert = await ShelfModel.findOneAndUpdate(query, newData, { upsert: true });
+        return res.json(upsert);
     }
     catch (err) {
         console.error(err)
@@ -50,47 +51,37 @@ router.post('/data',auth,  async (req, res, next) => {
     }
 });
 
-// get specific user data by id ** uses _id of db
+// get specific book on shelf data by id ** uses _id of db
 router.get('/data/:id', async (req, res) => {
-    const routeParams = req.params;
-    const { id } = routeParams;
-
-    user = await UserModel.findById(id);
-
     try {
-        return res.json(user);
-    } catch (err) {
-        return helpers.handleError(res);
-    }
-});
-
-// edit user data
-router.patch('/data/:id', (req, res) => {
-    const routeParams = req.params;
-    const { id } = routeParams;
-    UserModel.findOneAndUpdate({ _id: id }, { $set: req.body }, { new: true }, (err, user) => {
-        if (!err) return res.json({ result: "success", data: user });
-        else {
-            console.error(err);
-            helpers.handleError(res);
-        }
-    });
-})
-
-// delete user
-
-router.delete('/data/:id', async (req, res) => {
-    const routeParams = req.params;
-    const { id } = routeParams;
-    try {
-        user = await UserModel.findOneAndDelete({ _id: id });
-        if (user) return res.json(user);
-        return helpers.handleError(res, "user not found");
+        const routeParams = req.params;
+        const { id } = routeParams;
+        user_id = getUserId(req.cookies.user_token);
+        bookShelf = await ShelfModel.findOne({ user: user_id, book: id }).populate({
+            path: 'book',
+            populate: {
+                path: 'author'
+            }
+        });
+        if (bookShelf === null)
+            bookShelf = { shelf: 'none' }
+        return res.json(bookShelf);
     }
     catch (err) {
         console.error(err);
-        return helpers.handleError(res);
+        return handleError(res);
     }
+});
+
+// edit book on shelf data
+router.patch('/data/:id', (req, res) => {
+
+})
+
+// delete book from shelf
+
+router.delete('/data/:id', async (req, res) => {
+
 })
 
 // =================================================

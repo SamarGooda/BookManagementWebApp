@@ -12,7 +12,7 @@ const rm = promisify(fs.unlink);
 const UserModel = require("../models/User");
 
 const db_helpers = require("../helpers/db_helpers");
-const helpers = require("../helpers/general_helpers");
+const { getUserId, handleError, isValidToken } = require("../helpers/general_helpers");
 
 // helper functions
 
@@ -20,18 +20,24 @@ const helpers = require("../helpers/general_helpers");
 
 // get current logined user data
 router.get("/current_user", async function (req, res) {
-  const token = req.cookies.user_token;
-  console.log("token is: ", token);
-  let userId = helpers.getUserId(token);
-  console.log("userId: " + userId);
-  if (!userId) {
-    res.status(400).send();
-  } else {
-    const user = await UserModel.findById(userId);
-    const data = {
-      email: user.email,
-    };
-    res.json();
+  try {
+    const token = req.cookies.user_token;
+    console.log("token is: ", token);
+    let userId = getUserId(token);
+    console.log("userId: " + userId);
+    if (!userId) {
+      res.status(400).send();
+    } else {
+      const user = await UserModel.findById(userId);
+      const data = {
+        email: user.email,
+        name: user.first_name + " " + user.last_name
+      };
+      res.json(data);
+    }
+  } catch (err) {
+    console.error(err);
+    return handleError(res);
   }
 });
 // =====================================================================
@@ -88,7 +94,7 @@ router.post("/data", upload.single("image"), async (req, res, next) => {
   } catch (err) {
     console.error(err);
     const msg = "Error while saving record";
-    return helpers.handleError(res, msg);
+    return handleError(res, msg);
   }
 });
 
@@ -102,7 +108,7 @@ router.get("/data/:id", async (req, res) => {
   try {
     return res.json(user);
   } catch (err) {
-    return helpers.handleError(res);
+    return handleError(res);
   }
 });
 
@@ -118,7 +124,7 @@ router.patch("/data/:id", (req, res) => {
       if (!err) return res.json({ result: "success", data: user });
       else {
         console.error(err);
-        helpers.handleError(res);
+        handleError(res);
       }
     }
   );
@@ -132,10 +138,10 @@ router.delete("/data/:id", async (req, res) => {
   try {
     user = await UserModel.findOneAndDelete({ _id: id });
     if (user) return res.json(user);
-    return helpers.handleError(res, "user not found");
+    return handleError(res, "user not found");
   } catch (err) {
     console.error(err);
-    return helpers.handleError(res);
+    return handleError(res);
   }
 });
 
@@ -144,7 +150,7 @@ router.delete("/data/:id", async (req, res) => {
 // html routes
 router.get("/registration", (req, res) => {
   const token = req.cookies.user_token;
-  if (!helpers.isValidToken(token)) {
+  if (!isValidToken(token)) {
     res.set("Content-Type", "text/html");
     res.sendFile(path.resolve("../client/_site/users/html/registration.html"));
   } else {

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const jwtKey = 'very_hard_secret_key';
-const jwtExpirySeconds = 300;
+const jwtExpirySeconds = 86400;
 
 
 const UserModel = require('../models/User');
